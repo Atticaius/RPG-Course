@@ -8,7 +8,6 @@ public class PlayerMovement : MonoBehaviour
     // Object References
     ThirdPersonCharacter m_Character;   // A reference to the ThirdPersonCharacter on the object
     CameraRaycaster cameraRaycaster;
-    ThirdPersonUserControl userControl;
     Camera mainCamera;
 
     // Variables
@@ -19,7 +18,6 @@ public class PlayerMovement : MonoBehaviour
     
     private void Start()
     {
-        userControl = GetComponent<ThirdPersonUserControl>();
         cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
         m_Character = GetComponent<ThirdPersonCharacter>();
         mainCamera = Camera.main;
@@ -64,10 +62,10 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetMouseButton(0))
         {
-            switch (cameraRaycaster.layerHit)
+            switch (cameraRaycaster.CurrentLayerHit)
             {
                 case Layer.Walkable:
-                    currentClickTarget = cameraRaycaster.hit.point;    
+                    currentClickTarget = cameraRaycaster.Hit.point;    
                     break;
 
                 case Layer.Enemy:

@@ -15,20 +15,26 @@ public class Cursors : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        cameraRaycaster = GetComponent<CameraRaycaster>();	
+        cameraRaycaster = GetComponent<CameraRaycaster>();
+        cameraRaycaster.layerChangeObservers += OnLayerChange;
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        Debug.Log(cameraRaycaster.layerHit);
-        switch (cameraRaycaster.layerHit)
+	void OnLayerChange (Layer layerHit) {
+        switch (layerHit)
         {
             case Layer.Walkable:
                 Cursor.SetCursor(walkCursor, hotSpot, CursorMode.Auto);
                 break;
+
             case Layer.Enemy:
                 Cursor.SetCursor(attackCursor, hotSpot, CursorMode.Auto);
                 break;
+
+            case Layer.RaycastEndStop:
+                Cursor.SetCursor(unknownCursor, hotSpot, CursorMode.Auto);
+                break;
+
             default:
                 Cursor.SetCursor(unknownCursor, hotSpot, CursorMode.Auto);
                 break;

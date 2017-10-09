@@ -10,19 +10,22 @@ public class CameraRaycaster : MonoBehaviour
     float distanceToBackground = 100f;
     Camera viewCamera;
 
-    RaycastHit m_hit;
-    public RaycastHit hit
+    RaycastHit rayCastHit;
+    public RaycastHit Hit
     {
-        get { return m_hit; }
+        get { return rayCastHit; }
     }
 
-    Layer m_layerHit;
-    public Layer layerHit
+    Layer layerHit;
+    public Layer CurrentLayerHit
     {
-        get { return m_layerHit; }
+        get { return layerHit; }
     }
 
-    void Start() // TODO Awake?
+    public delegate void LayerChange (Layer newLayer);
+    public event LayerChange layerChangeObservers;
+
+    void Start()
     {
         viewCamera = Camera.main;
     }
@@ -35,15 +38,20 @@ public class CameraRaycaster : MonoBehaviour
             var hit = RaycastForLayer(layer);
             if (hit.HasValue)
             {
-                m_hit = hit.Value;
-                m_layerHit = layer;
+                rayCastHit = hit.Value;
+                if (layerHit != layer)
+                {
+                    layerHit = layer;
+                    layerChangeObservers(layerHit);
+                }
+                layerHit = layer;
                 return;
             }
         }
 
         // Otherwise return background hit
-        m_hit.distance = distanceToBackground;
-        m_layerHit = Layer.RaycastEndStop;
+        rayCastHit.distance = distanceToBackground;
+        layerHit = Layer.RaycastEndStop;
     }
 
     RaycastHit? RaycastForLayer(Layer layer)
