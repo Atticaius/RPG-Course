@@ -9,13 +9,13 @@ public class SpinMe : MonoBehaviour {
 	[SerializeField] float zRotationsPerMinute = 1f;
 	
 	void Update () {
-        float xDegreesPerFrame = 0; // TODO COMPLETE ME
+        float xDegreesPerFrame = Time.deltaTime / 60 * 360 * xRotationsPerMinute; // TODO COMPLETE ME
         transform.RotateAround (transform.position, transform.right, xDegreesPerFrame);
 
-		float yDegreesPerFrame = 0; // TODO COMPLETE ME
+		float yDegreesPerFrame = Time.deltaTime / 60 * 360 * yRotationsPerMinute; // TODO COMPLETE ME
         transform.RotateAround (transform.position, transform.up, yDegreesPerFrame);
 
-        float zDegreesPerFrame = 0; // TODO COMPLETE ME
+        float zDegreesPerFrame = Time.deltaTime / 60 * 360 * zRotationsPerMinute; // TODO COMPLETE ME
         transform.RotateAround (transform.position, transform.forward, zDegreesPerFrame);
 	}
 }

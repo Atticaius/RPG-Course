@@ -1,31 +1,46 @@
 using System;
 using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
+using UnityEngine.AI;
 
-[RequireComponent(typeof (ThirdPersonCharacter))]
+[RequireComponent(typeof(ThirdPersonCharacter))]
 public class PlayerMovement : MonoBehaviour
 {
     // Object References
-    ThirdPersonCharacter m_Character;   // A reference to the ThirdPersonCharacter on the object
+    AICharacterControl aiCharacterControl;
+    ThirdPersonCharacter thirdPersonCharacter;
     CameraRaycaster cameraRaycaster;
     Camera mainCamera;
+    NavMeshAgent navMeshAgent;
+    GameObject walkTarget;
+
+    // Layers
+    const int walkableLayer = 8;
+    const int enemyLayer = 9;
+    const int raycastEndStop = -1;
 
     // Variables
     [SerializeField] float walkMoveStopRadius = 1f;
     public String controlMode;
     Vector3 currentClickTarget;
     bool isInDirectMovement = false;
-    
+
     // Delegate
     public delegate void ChangedControlMode (String text);
     public event ChangedControlMode ControlModeDelegate;
-    
-    private void Start()
+
+    private void Start ()
     {
+        // Object references
+        thirdPersonCharacter = GetComponent<ThirdPersonCharacter>();
         cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
-        m_Character = GetComponent<ThirdPersonCharacter>();
+        aiCharacterControl = GetComponent<AICharacterControl>();
+        navMeshAgent = GetComponent<NavMeshAgent>();
         mainCamera = Camera.main;
-        currentClickTarget = transform.position;
+        walkTarget = new GameObject("Walk Target");
+
+        // Delegate controls
+        cameraRaycaster.notifyMouseClickObservers += ProcessMouseMovement;
         CheckControlMode();
         ControlModeDelegate(controlMode);
     }
@@ -34,7 +49,13 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.G))
         {
+            // Enable/disable automatic controls
             isInDirectMovement = !isInDirectMovement;
+            aiCharacterControl.enabled = !aiCharacterControl.enabled;
+            navMeshAgent.enabled = !navMeshAgent.enabled;
+            aiCharacterControl.SetTarget(null);
+
+            // Check control mode and send to delegates
             CheckControlMode();
             ControlModeDelegate(controlMode);
         }
@@ -42,6 +63,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void CheckControlMode ()
     {
+        // Return state of the control mode
         if (isInDirectMovement)
         {
             controlMode = "Keyboard";
@@ -53,65 +75,48 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // Fixed update is called in sync with physics
-    private void FixedUpdate()
+    private void FixedUpdate ()
     {
         if (isInDirectMovement)
         {
             ProcessDirectMovement();
             controlMode = "Keyboard";
-        } else
+        }
+        else
         {
-            ProcessMouseMovement();
             controlMode = "Mouse";
         }
     }
 
     void ProcessDirectMovement ()
     {
-        currentClickTarget = transform.position;
-
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
         var camForward = Vector3.Scale(mainCamera.transform.forward, new Vector3(1, 0, 1)).normalized;
         var move = v * camForward + h * mainCamera.transform.right;
 
-        m_Character.Move(move, false, false);
+        thirdPersonCharacter.Move(move, false, false);
     }
 
-    void ProcessMouseMovement ()
+    void ProcessMouseMovement (RaycastHit raycastHit, int layerHit)
     {
-        if (Input.GetMouseButton(0))
+        switch (layerHit)
         {
-            switch (cameraRaycaster.CurrentLayerHit)
-            {
-                case Layer.Walkable:
-                    currentClickTarget = cameraRaycaster.Hit.point;    
-                    break;
+            case walkableLayer:
+                walkTarget.transform.position = raycastHit.point;
+                aiCharacterControl.SetTarget(walkTarget.transform);
+                break;
 
-                case Layer.Enemy:
-                    Debug.Log("Can't move towards enemy yet");
-                    break;
+            case enemyLayer:
+                aiCharacterControl.SetTarget(raycastHit.transform);
+                break;
 
-                default:
-                    Debug.Log("Don't know how to handle this");
-                    break;
-            }   
-        }
-
-        if (Vector3.Distance(currentClickTarget, transform.position) >= walkMoveStopRadius)
-        {
-            m_Character.Move(currentClickTarget - transform.position, false, false);
-        } else
-        {
-            m_Character.Move(Vector3.zero, false, false);
+            default:
+                Debug.Log("Don't know how to handle this");
+                break;
         }
     }
 
-    private void OnDrawGizmos ()
-    {
-        Gizmos.color = Color.black;
-        Gizmos.DrawLine(transform.position, currentClickTarget);
-    }
 }
 

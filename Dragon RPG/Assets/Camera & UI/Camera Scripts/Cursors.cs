@@ -6,6 +6,10 @@ public class Cursors : MonoBehaviour {
 
     CameraRaycaster cameraRaycaster;
 
+    // Layers
+    const int walkableLayer = 8;
+    const int enemyLayer = 9;
+
     // Variables
     [SerializeField] Texture2D walkCursor;
     [SerializeField] Texture2D attackCursor;
@@ -16,23 +20,19 @@ public class Cursors : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         cameraRaycaster = GetComponent<CameraRaycaster>();
-        cameraRaycaster.layerChangeObservers += OnLayerChange;
+        cameraRaycaster.notifyLayerChangeObservers += OnLayerChange;
 	}
 	
 	// Update is called once per frame
-	void OnLayerChange (Layer layerHit) {
-        switch (layerHit)
+	void OnLayerChange (int newLayer) {
+        switch (newLayer)
         {
-            case Layer.Walkable:
+            case walkableLayer:
                 Cursor.SetCursor(walkCursor, hotSpot, CursorMode.Auto);
                 break;
 
-            case Layer.Enemy:
+            case enemyLayer:
                 Cursor.SetCursor(attackCursor, hotSpot, CursorMode.Auto);
-                break;
-
-            case Layer.RaycastEndStop:
-                Cursor.SetCursor(unknownCursor, hotSpot, CursorMode.Auto);
                 break;
 
             default:
