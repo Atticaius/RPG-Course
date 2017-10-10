@@ -16,12 +16,18 @@ public class PlayerMovement : MonoBehaviour
     Vector3 currentClickTarget;
     bool isInDirectMovement = false;
     
+    // Delegate
+    public delegate void ChangedControlMode (String text);
+    public event ChangedControlMode ControlModeDelegate;
+    
     private void Start()
     {
         cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
         m_Character = GetComponent<ThirdPersonCharacter>();
         mainCamera = Camera.main;
         currentClickTarget = transform.position;
+        CheckControlMode();
+        ControlModeDelegate(controlMode);
     }
 
     private void LateUpdate ()
@@ -29,8 +35,23 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.G))
         {
             isInDirectMovement = !isInDirectMovement;
+            CheckControlMode();
+            ControlModeDelegate(controlMode);
         }
     }
+
+    private void CheckControlMode ()
+    {
+        if (isInDirectMovement)
+        {
+            controlMode = "Keyboard";
+        }
+        else
+        {
+            controlMode = "Mouse";
+        }
+    }
+
     // Fixed update is called in sync with physics
     private void FixedUpdate()
     {
@@ -85,6 +106,12 @@ public class PlayerMovement : MonoBehaviour
         {
             m_Character.Move(Vector3.zero, false, false);
         }
+    }
+
+    private void OnDrawGizmos ()
+    {
+        Gizmos.color = Color.black;
+        Gizmos.DrawLine(transform.position, currentClickTarget);
     }
 }
 

@@ -21,6 +21,10 @@ public class CameraFollow : MonoBehaviour {
         {
             transform.RotateAround(player.transform.position, Vector3.up, Input.GetAxis("Arrow Horizontal") * cameraTurnSpeed);
         }
+        if (Input.GetAxis("Horizontal") != 0)
+        {
+            transform.RotateAround(player.transform.position, Vector3.up, Input.GetAxis("Horizontal") * cameraTurnSpeed);
+        }
         if (Input.GetAxis("Arrow Vertical") != 0)
         {
             transform.RotateAround(player.transform.position, Vector3.right, Input.GetAxis("Arrow Vertical"));

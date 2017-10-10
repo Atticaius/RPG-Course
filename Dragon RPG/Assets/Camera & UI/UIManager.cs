@@ -11,10 +11,11 @@ public class UIManager : MonoBehaviour {
 	void Start () {
         text = GetComponentInChildren<Text>();
         playerMovement = FindObjectOfType<PlayerMovement>();
+        playerMovement.ControlModeDelegate += onControlModeChange;
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        text.text = playerMovement.controlMode;
+	void onControlModeChange (string controlMode) {
+        text.text = controlMode;
 	}
 }
