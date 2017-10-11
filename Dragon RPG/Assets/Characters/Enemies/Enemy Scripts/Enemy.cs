@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
 
-public class Enemy : MonoBehaviour {
+public class Enemy : MonoBehaviour, IDamageable {
 
     // Object References
     AICharacterControl aiCharacterControl;
@@ -23,6 +23,16 @@ public class Enemy : MonoBehaviour {
         }
     }
 
+    public void TakeDamage (float damage)
+    {
+        currentHealthPoints = Mathf.Clamp(currentHealthPoints - damage, 0, maxHealthPoints);
+    }
+
+    private void OnDrawGizmos ()
+    {
+        Gizmos.DrawWireSphere(transform.position, targetRadius);
+    }
+
     private void Start ()
     {
         aiCharacterControl = GetComponent<AICharacterControl>();
@@ -38,10 +48,5 @@ public class Enemy : MonoBehaviour {
         {
             aiCharacterControl.SetTarget(transform);
         }
-    }
-
-    private void OnDrawGizmos ()
-    {
-        Gizmos.DrawWireSphere(transform.position, targetRadius);
     }
 }

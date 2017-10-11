@@ -20,7 +20,6 @@ public class PlayerMovement : MonoBehaviour
     const int raycastEndStop = -1;
 
     // Variables
-    [SerializeField] float walkMoveStopRadius = 1f;
     public String controlMode;
     Vector3 currentClickTarget;
     bool isInDirectMovement = false;
