@@ -11,10 +11,10 @@ public class Enemy : MonoBehaviour, IDamageable {
 
     // Variables
     [SerializeField] float maxHealthPoints = 100f;
-    [SerializeField] float targetRadius = 2f;
+    [SerializeField] float followRadius = 6f;
+    [SerializeField] float attackRadius = 3f;
     float currentHealthPoints = 100f;
     
-
     public float HealthAsPercentage
     {
         get
@@ -24,13 +24,9 @@ public class Enemy : MonoBehaviour, IDamageable {
     }
 
     public void TakeDamage (float damage)
+
     {
         currentHealthPoints = Mathf.Clamp(currentHealthPoints - damage, 0, maxHealthPoints);
-    }
-
-    private void OnDrawGizmos ()
-    {
-        Gizmos.DrawWireSphere(transform.position, targetRadius);
     }
 
     private void Start ()
@@ -41,12 +37,21 @@ public class Enemy : MonoBehaviour, IDamageable {
 
     private void Update ()
     {
-        if (Vector3.Distance(transform.position, player.transform.position) <= targetRadius)
+        if (Vector3.Distance(transform.position, player.transform.position) <= followRadius)
         {
             aiCharacterControl.SetTarget(player.transform);
         } else
         {
             aiCharacterControl.SetTarget(transform);
         }
+    }
+
+    private void OnDrawGizmos ()
+    {
+        Gizmos.color = Color.black;
+        Gizmos.DrawWireSphere(transform.position, followRadius);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRadius);
     }
 }

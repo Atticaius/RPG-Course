@@ -2573,7 +2573,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealthPoints: 100
-  targetRadius: 4
+  targetRadius: 6
+  attackRadius: 3
 --- !u!136 &136565877553513888
 CapsuleCollider:
   m_ObjectHideFlags: 1
