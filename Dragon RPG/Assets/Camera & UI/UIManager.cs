@@ -8,7 +8,7 @@ public class UIManager : MonoBehaviour {
     [SerializeField] Text text;
     private PlayerMovement playerMovement;
 	// Use this for initialization
-	void Start () {
+	void Awake () {
         text = GetComponentInChildren<Text>();
         playerMovement = FindObjectOfType<PlayerMovement>();
         playerMovement.ControlModeDelegate += onControlModeChange;
