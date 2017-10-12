@@ -95,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
         var camForward = Vector3.Scale(mainCamera.transform.forward, new Vector3(1, 0, 1)).normalized;
         var move = v * camForward + h * mainCamera.transform.right;
 
-        thirdPersonCharacter.Move(move, false, false);
+        thirdPersonCharacter.Move(move);
     }
 
     void ProcessMouseMovement (RaycastHit raycastHit, int layerHit)

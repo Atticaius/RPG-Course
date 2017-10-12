@@ -16,6 +16,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		[SerializeField] float m_AnimSpeedMultiplier = 1f;
 		[SerializeField] float m_GroundCheckDistance = 0.1f;
 
+        // Constants
+        const bool crouchDefault = false;
+        const bool jumpDefault = false;
+
 		Rigidbody m_Rigidbody;
 		Animator m_Animator;
 		bool m_IsGrounded;
@@ -35,7 +39,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		}
 
 
-		public void Move(Vector3 move, bool crouch, bool jump)
+		public void Move(Vector3 move, bool crouch = crouchDefault, bool jump = jumpDefault)
 		{
 
 			// convert the world relative moveInput vector into a local-relative
@@ -53,7 +57,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			// control and velocity handling is different when grounded and airborne:
 			if (m_IsGrounded)
 			{
-				// HandleGroundedMovement(crouch, jump);
+				HandleGroundedMovement(crouch, jump);
 			}
 			else
 			{
