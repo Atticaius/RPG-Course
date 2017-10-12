@@ -9,7 +9,6 @@ public class Enemy : MonoBehaviour, IDamageable {
     AICharacterControl aiCharacterControl;
     Player player;
     
-
     // Variables
     [SerializeField] float maxHealthPoints = 100f;
     [SerializeField] float followRadius = 6f;
@@ -24,8 +23,8 @@ public class Enemy : MonoBehaviour, IDamageable {
     [SerializeField] float secondsBetweenShots = 1f;
     [SerializeField] Vector3 verticalAimOffset = new Vector3(0, 1f, 0);
     Projectile projectileSpawned;
-
-
+    
+    // Getters
     public float HealthAsPercentage
     {
         get
@@ -33,7 +32,6 @@ public class Enemy : MonoBehaviour, IDamageable {
             return currentHealthPoints / maxHealthPoints;
         }
     }
-
     public float GetHealth
     {
         get
@@ -49,7 +47,6 @@ public class Enemy : MonoBehaviour, IDamageable {
     }
 
     public void TakeDamage (float damage)
-
     {
         currentHealthPoints = Mathf.Clamp(currentHealthPoints - damage, 0, maxHealthPoints);
         if (currentHealthPoints <= 0)
