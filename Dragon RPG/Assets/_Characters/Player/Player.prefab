@@ -718,10 +718,8 @@ MonoBehaviour:
   animatorOverrideController: {fileID: 22100000, guid: 0211a4a030d9fc04a971f3a5cd629d20,
     type: 2}
   maxHealthPoints: 100
-  weaponInUse: {fileID: 11400000, guid: 1daec54095e51f54c82a84d8356692da, type: 2}
+  weaponInUse: {fileID: 11400000, guid: dcd86c11d70590c4eb58c5fe1e85a72f, type: 2}
   attackDamage: 10
-  attackRange: 3
-  secondsBetweenHits: 1
 --- !u!114 &114807288060115498
 MonoBehaviour:
   m_ObjectHideFlags: 1

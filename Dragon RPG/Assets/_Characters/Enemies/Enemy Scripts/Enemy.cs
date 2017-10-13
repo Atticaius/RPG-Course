@@ -12,7 +12,7 @@ namespace RPG.Characters
 
         // Object References
         AICharacterControl aiCharacterControl;
-        Player player;
+        GameObject player;
 
         // Variables
         [SerializeField] float maxHealthPoints = 100f;
@@ -48,7 +48,68 @@ namespace RPG.Characters
         private void Start ()
         {
             aiCharacterControl = GetComponent<AICharacterControl>();
-            player = FindObjectOfType<Player>();
+            player = GameObject.FindGameObjectWithTag("Player");
+        }
+
+        private void Update ()
+        {
+            CheckTargetRanges();
+        }
+
+        void CheckTargetRanges ()
+        {
+            if (IsInChaseRange(player))
+            {
+                ChaseTarget(player);
+            }
+            else
+            {
+                aiCharacterControl.SetTarget(transform);
+            }
+
+            if (IsInAttackRange(player))
+            {
+                AttackTarget(player);
+            }
+        }
+
+        void ChaseTarget (GameObject target)
+        {
+            aiCharacterControl.SetTarget(player.transform);
+        }
+
+        void AttackTarget (GameObject target)
+        {
+            if (!isAttacking)
+            {
+                InvokeRepeating("SpawnProjectile", 0, secondsBetweenShots);
+                isAttacking = true;
+            }
+            else if (!IsInAttackRange(target))
+            {
+                CancelInvoke();
+                isAttacking = false;
+            }
+        }
+
+        bool IsInChaseRange (GameObject target)
+        {
+            return (Vector3.Distance(transform.position, target.transform.position) <= followRadius);
+        }
+
+        bool IsInAttackRange (GameObject target)
+        {
+            return Vector3.Distance(transform.position, player.transform.position) <= attackRadius;
+        }
+
+        void SpawnProjectile ()
+        {
+            if (IsInAttackRange(player))
+            {
+                projectileSpawned = Instantiate(projectileToUse, projectileSocket.transform.position, Quaternion.identity).GetComponent<Projectile>();
+                Vector3 unitVectorToPlayer = (player.transform.position + verticalAimOffset - projectileSpawned.transform.position).normalized;
+                projectileSpawned.FireProjectile(gameObject, unitVectorToPlayer, damagePerShot);
+            }
         }
 
         public void TakeDamage (float damage)
@@ -59,44 +120,6 @@ namespace RPG.Characters
                 Destroy(gameObject);
             }
         }
-
-
-
-        private void Update ()
-        {
-            // Follow player
-            if (Vector3.Distance(transform.position, player.transform.position) <= followRadius)
-            {
-                aiCharacterControl.SetTarget(player.transform);
-            }
-            else
-            {
-                aiCharacterControl.SetTarget(transform);
-            }
-
-            // Attack player
-            if (Vector3.Distance(transform.position, player.transform.position) <= attackRadius && !isAttacking)
-            {
-                InvokeRepeating("SpawnProjectile", 0, secondsBetweenShots);
-                isAttacking = true;
-            }
-            else if (Vector3.Distance(transform.position, player.transform.position) > attackRadius)
-            {
-                CancelInvoke();
-                isAttacking = false;
-            }
-        }
-
-        void SpawnProjectile ()
-        {
-            if (Vector3.Distance(transform.position, player.transform.position) <= attackRadius)
-            {
-                projectileSpawned = Instantiate(projectileToUse, projectileSocket.transform.position, Quaternion.identity).GetComponent<Projectile>();
-                Vector3 unitVectorToPlayer = (player.transform.position + verticalAimOffset - projectileSpawned.transform.position).normalized;
-                projectileSpawned.FireProjectile(gameObject, unitVectorToPlayer, damagePerShot);
-            }
-        }
-
 
         private void OnDrawGizmos ()
         {

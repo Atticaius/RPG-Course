@@ -42,7 +42,7 @@ namespace RPG.Characters
             walkTarget = new GameObject("Walk Target");
 
             // Delegate controls
-            cameraRaycaster.notifyMouseClickObservers += ProcessMouseMovement;
+            cameraRaycaster.notifyLeftClickObservers += ProcessMouseMovement;
             CheckControlMode();
             ControlModeDelegate(controlMode);
         }
@@ -111,13 +111,18 @@ namespace RPG.Characters
                     break;
 
                 case enemyLayer:
-                    aiCharacterControl.SetTarget(raycastHit.transform);
+                    SetTarget(raycastHit);
                     break;
 
                 default:
                     Debug.Log("Don't know how to handle this");
                     break;
             }
+        }
+
+        public void SetTarget (RaycastHit raycastHit)
+        {
+            aiCharacterControl.SetTarget(raycastHit.transform);
         }
 
     }

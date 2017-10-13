@@ -69,7 +69,7 @@ namespace RPG.Characters
         private void RegisterForMouseClicks ()
         {
             cameraRaycaster = FindObjectOfType<CameraRaycaster>();
-            cameraRaycaster.notifyMouseClickObservers += OnMouseClick;
+            cameraRaycaster.notifyLeftClickObservers += OnMouseClick;
         }
 
         void OnMouseClick (RaycastHit raycastHit, int layerHit)
