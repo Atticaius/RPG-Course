@@ -10,6 +10,18 @@ namespace RPG.Weapons
         [SerializeField] GameObject weaponPrefab;
         [SerializeField] AnimationClip attackAnimation;
         public Transform gripTransform;
+        [SerializeField] float attackRange = 3f;
+        [SerializeField] float secondsBetweenHits = 3f;
+
+        public float GetSecondsBetweenHits ()
+        {
+                return secondsBetweenHits;
+        }
+
+        public float GetAttackRange ()
+        {
+            return attackRange;
+        }
 
         public GameObject GetWeaponPrefab ()
         {

@@ -15,13 +15,13 @@ namespace RPG.Characters
         [SerializeField] AnimatorOverrideController animatorOverrideController;
         CameraRaycaster cameraRaycaster;
         GameObject currentTarget;
+        Animator animator;
 
         // Variables
         [SerializeField] float maxHealthPoints = 100f;
         [SerializeField] Weapon weaponInUse;
         [SerializeField] float attackDamage = 10f;
-        [SerializeField] float attackRange = 3f;
-        [SerializeField] float secondsBetweenHits = 3f;
+
         float lastHitTime;
         const int enemyLayer = 9;
         float currentHealthPoints = 100f;
@@ -37,13 +37,13 @@ namespace RPG.Characters
         {
             RegisterForMouseClicks();
             PutWeaponInHand();
-            OverrideAnimatorController();
+            SetupAnimator();
             currentHealthPoints = maxHealthPoints;
         }
 
-        private void OverrideAnimatorController ()
+        private void SetupAnimator ()
         {
-            Animator animator = GetComponent<Animator>();
+            animator = GetComponent<Animator>();
             animator.runtimeAnimatorController = animatorOverrideController;
             animatorOverrideController["DEFAULT ATTACK"] = weaponInUse.GetAnimClip();
         }
@@ -85,17 +85,22 @@ namespace RPG.Characters
         {
             if (currentTarget != null)
             {
-                bool isInRange = Vector3.Distance(transform.position, currentTarget.transform.position) <= attackRange;
-                if (Time.time - lastHitTime > secondsBetweenHits && isInRange)
+                if (Time.time - lastHitTime > weaponInUse.GetSecondsBetweenHits() && IsInRange(currentTarget))
                 {
+                    animator.SetTrigger("Attack"); // TODO Make const
                     currentTarget.GetComponent<Enemy>().TakeDamage(attackDamage);
                     lastHitTime = Time.time;
                 }
-            }
-            else
+            } else
             {
                 CancelInvoke();
             }
+        }
+
+        private bool IsInRange (GameObject target)
+        {
+            bool isInRange = Vector3.Distance(transform.position, target.transform.position) <= weaponInUse.GetAttackRange();
+            return isInRange;
         }
 
         public void TakeDamage (float damage)
