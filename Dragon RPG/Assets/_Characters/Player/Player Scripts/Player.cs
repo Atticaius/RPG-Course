@@ -12,8 +12,9 @@ namespace RPG.Characters
     public class Player : MonoBehaviour, IDamageable
     {
         // Object references
+        [SerializeField] AnimatorOverrideController animatorOverrideController;
         CameraRaycaster cameraRaycaster;
-        [SerializeField] GameObject currentTarget;
+        GameObject currentTarget;
 
         // Variables
         [SerializeField] float maxHealthPoints = 100f;
@@ -35,8 +36,16 @@ namespace RPG.Characters
         void Start ()
         {
             RegisterForMouseClicks();
-            currentHealthPoints = maxHealthPoints;
             PutWeaponInHand();
+            OverrideAnimatorController();
+            currentHealthPoints = maxHealthPoints;
+        }
+
+        private void OverrideAnimatorController ()
+        {
+            Animator animator = GetComponent<Animator>();
+            animator.runtimeAnimatorController = animatorOverrideController;
+            animatorOverrideController["DEFAULT ATTACK"] = weaponInUse.GetAnimClip();
         }
 
         private void PutWeaponInHand ()
