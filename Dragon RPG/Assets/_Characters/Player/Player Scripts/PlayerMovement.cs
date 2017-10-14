@@ -17,11 +17,6 @@ namespace RPG.Characters
         NavMeshAgent navMeshAgent;
         GameObject walkTarget;
 
-        // Layers
-        const int walkableLayer = 8;
-        const int enemyLayer = 9;
-        const int raycastEndStop = -1;
-
         // Variables
         public String controlMode;
         Vector3 currentClickTarget;
@@ -42,7 +37,8 @@ namespace RPG.Characters
             walkTarget = new GameObject("Walk Target");
 
             // Delegate controls
-            cameraRaycaster.notifyLeftClickObservers += ProcessMouseMovement;
+            cameraRaycaster.notifyMouseOverPotentiallyWalkable += OnMouseOverWalkable;
+            cameraRaycaster.notifyMouseOverEnemy += OnMouseOverEnemy;
             CheckControlMode();
             ControlModeDelegate(controlMode);
         }
@@ -63,22 +59,14 @@ namespace RPG.Characters
             }
         }
 
+        private void FixedUpdate ()
+        {
+            CheckControlMode();
+        }
+
         private void CheckControlMode ()
         {
             // Return state of the control mode
-            if (isInDirectMovement)
-            {
-                controlMode = "Keyboard";
-            }
-            else
-            {
-                controlMode = "Mouse";
-            }
-        }
-
-        // Fixed update is called in sync with physics
-        private void FixedUpdate ()
-        {
             if (isInDirectMovement)
             {
                 ProcessDirectMovement();
@@ -101,30 +89,26 @@ namespace RPG.Characters
             thirdPersonCharacter.Move(move);
         }
 
-        void ProcessMouseMovement (RaycastHit raycastHit, int layerHit)
+        void OnMouseOverWalkable (Vector3 destination)
         {
-            switch (layerHit)
+            if (Input.GetMouseButtonDown(0) && !isInDirectMovement)
             {
-                case walkableLayer:
-                    walkTarget.transform.position = raycastHit.point;
-                    aiCharacterControl.SetTarget(walkTarget.transform);
-                    break;
-
-                case enemyLayer:
-                    SetTarget(raycastHit);
-                    break;
-
-                default:
-                    Debug.Log("Don't know how to handle this");
-                    break;
+                walkTarget.transform.position = destination;
+                aiCharacterControl.SetTarget(walkTarget.transform);
             }
         }
 
-        public void SetTarget (RaycastHit raycastHit)
+        void OnMouseOverEnemy (Enemy enemy)
         {
-            aiCharacterControl.SetTarget(raycastHit.transform);
+            if (!isInDirectMovement)
+            {
+                if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+                {
+                    aiCharacterControl.SetTarget(enemy.transform);
+                }
+            }
+            
         }
-
     }
 }
 

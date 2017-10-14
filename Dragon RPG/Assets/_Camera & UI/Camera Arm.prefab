@@ -24,7 +24,6 @@ GameObject:
   - component: {fileID: 124081504478163278}
   - component: {fileID: 81055935716715990}
   - component: {fileID: 114197706035634066}
-  - component: {fileID: 114555264508187380}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -149,20 +148,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   layerPriorities: 0900000008000000
---- !u!114 &114555264508187380
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1122026997746362}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8fdbdb84b20bf44d985ec577a4f2eed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   walkCursor: {fileID: 2800000, guid: 284ab66e1be27eb488e782adcdd9392c, type: 3}
-  attackCursor: {fileID: 2800000, guid: 96ac9d6ea3353f7449c95576221437b8, type: 3}
-  unknownCursor: {fileID: 2800000, guid: cf9d1b0810686724e903ccb6595b347f, type: 3}
+  enemyCursor: {fileID: 2800000, guid: 96ac9d6ea3353f7449c95576221437b8, type: 3}
+  hotSpot: {x: 0, y: 0}
 --- !u!124 &124081504478163278
 Behaviour:
   m_ObjectHideFlags: 1

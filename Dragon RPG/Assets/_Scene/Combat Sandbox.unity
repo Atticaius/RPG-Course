@@ -230,25 +230,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &738077857 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1296489112970354, guid: 951a1c48dbfcbed43b7ce896cc37e91b,
-    type: 2}
-  m_PrefabInternal: {fileID: 1135231157}
---- !u!114 &738077867
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 738077857}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c61968106a0d4d498afe3fae1758518, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  energyBar: {fileID: 1783777752}
-  maxEnergyPoints: 100
-  pointsPerHit: 10
 --- !u!1001 &838743284
 Prefab:
   m_ObjectHideFlags: 0
@@ -461,6 +442,16 @@ Prefab:
       propertyPath: m_RootOrder
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 114588294270600956, guid: 951a1c48dbfcbed43b7ce896cc37e91b,
+        type: 2}
+      propertyPath: energyBar
+      value: 
+      objectReference: {fileID: 1783777752}
+    - target: {fileID: 114588294270600956, guid: 951a1c48dbfcbed43b7ce896cc37e91b,
+        type: 2}
+      propertyPath: xValueOffset
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 951a1c48dbfcbed43b7ce896cc37e91b, type: 2}
   m_IsPrefabParent: 0
@@ -587,6 +578,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114197706035634066, guid: 07fd844853d340245b81d293a937d638,
+        type: 2}
+      propertyPath: unknownCursor
+      value: 
+      objectReference: {fileID: 2800000, guid: cf9d1b0810686724e903ccb6595b347f, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 07fd844853d340245b81d293a937d638, type: 2}
   m_IsPrefabParent: 0

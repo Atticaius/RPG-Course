@@ -23,7 +23,6 @@ namespace RPG.Characters
         [SerializeField] float attackDamage = 10f;
 
         float lastHitTime;
-        const int enemyLayer = 9;
         float currentHealthPoints = 100f;
         public float HealthAsPercentage
         {
@@ -68,16 +67,19 @@ namespace RPG.Characters
 
         private void RegisterForMouseClicks ()
         {
-            cameraRaycaster = FindObjectOfType<CameraRaycaster>();
-            cameraRaycaster.notifyLeftClickObservers += OnMouseClick;
+            cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
+            cameraRaycaster.notifyMouseOverEnemy += OnMouseOverEnemy;
         }
-
-        void OnMouseClick (RaycastHit raycastHit, int layerHit)
+   
+        void OnMouseOverEnemy (Enemy enemy)
         {
-            currentTarget = raycastHit.collider.gameObject;
-            if (layerHit == 9 && currentTarget != null)
+            if (enemy != null)
             {
-                InvokeRepeating("AttackTarget", 0, .1f);
+                currentTarget = enemy.gameObject;
+                if (Input.GetMouseButtonDown(0))
+                {
+                    InvokeRepeating("AttackTarget", 0, .1f);
+                }
             }
         }
 
