@@ -11,7 +11,7 @@ namespace RPG.Characters
 
         // Object References
         AICharacterControl aiCharacterControl;
-        GameObject player;
+        Player player;
 
         // Variables
         [SerializeField] float maxHealthPoints = 100f;
@@ -25,6 +25,7 @@ namespace RPG.Characters
         [SerializeField] GameObject projectileSocket;
         [SerializeField] float damagePerShot = 8f;
         [SerializeField] float secondsBetweenShots = 1f;
+        [SerializeField] float shotVariation = .1f;
         [SerializeField] Vector3 verticalAimOffset = new Vector3(0, 1f, 0);
         Projectile projectileSpawned;
 
@@ -47,28 +48,35 @@ namespace RPG.Characters
         private void Start ()
         {
             aiCharacterControl = GetComponent<AICharacterControl>();
-            player = GameObject.FindGameObjectWithTag("Player");
+            player = FindObjectOfType<Player>();
         }
 
         private void Update ()
         {
-            CheckTargetRanges();
+            if (player.HealthAsPercentage <= Mathf.Epsilon)
+            {
+                StopAllCoroutines();
+                Destroy(this);
+            } else
+            {
+                CheckTargetRanges();
+            }
         }
 
         void CheckTargetRanges ()
         {
-            if (IsInChaseRange(player))
+            if (IsInChaseRange(player.gameObject))
             {
-                ChaseTarget(player);
+                ChaseTarget(player.gameObject);
             }
             else
             {
                 aiCharacterControl.SetTarget(transform);
             }
 
-            if (IsInAttackRange(player))
+            if (IsInAttackRange(player.gameObject))
             {
-                AttackTarget(player);
+                AttackTarget(player.gameObject);
             }
         }
 
@@ -79,9 +87,10 @@ namespace RPG.Characters
 
         void AttackTarget (GameObject target)
         {
+            float randomizedFiringRate = Random.Range(secondsBetweenShots - shotVariation, secondsBetweenShots + shotVariation);
             if (!isAttacking)
             {
-                InvokeRepeating("SpawnProjectile", 0, secondsBetweenShots);
+                InvokeRepeating("SpawnProjectile", 0, randomizedFiringRate);
                 isAttacking = true;
             }
             else if (!IsInAttackRange(target))
@@ -103,7 +112,7 @@ namespace RPG.Characters
 
         void SpawnProjectile ()
         {
-            if (IsInAttackRange(player))
+            if (IsInAttackRange(player.gameObject))
             {
                 projectileSpawned = Instantiate(projectileToUse, projectileSocket.transform.position, Quaternion.identity).GetComponent<Projectile>();
                 Vector3 unitVectorToPlayer = (player.transform.position + verticalAimOffset - projectileSpawned.transform.position).normalized;
