@@ -1,6 +1,6 @@
 ﻿namespace RPG.Core
 {
-    internal interface IDamageable
+    public interface IDamageable
     {
         void TakeDamage (float damage);
     }

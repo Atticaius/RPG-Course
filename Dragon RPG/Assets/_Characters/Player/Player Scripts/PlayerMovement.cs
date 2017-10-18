@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityStandardAssets.Characters.ThirdPerson;
 using UnityEngine.AI;
 using RPG.CameraUI;
 
@@ -91,7 +90,7 @@ namespace RPG.Characters
 
         void OnMouseOverWalkable (Vector3 destination)
         {
-            if (Input.GetMouseButtonDown(0) && !isInDirectMovement)
+            if (Input.GetMouseButton(0) && !isInDirectMovement)
             {
                 walkTarget.transform.position = destination;
                 aiCharacterControl.SetTarget(walkTarget.transform);

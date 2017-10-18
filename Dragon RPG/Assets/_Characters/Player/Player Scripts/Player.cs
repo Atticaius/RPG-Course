@@ -13,16 +13,23 @@ namespace RPG.Characters
     {
         // Object references
         [SerializeField] AnimatorOverrideController animatorOverrideController;
-        CameraRaycaster cameraRaycaster;
         GameObject currentTarget;
         Animator animator;
-
-        // Variables
-        [SerializeField] float maxHealthPoints = 100f;
+    
+        // Weapons
+        [Header("Weapon")]
         [SerializeField] Weapon weaponInUse;
-        [SerializeField] float attackDamage = 10f;
-
+        [SerializeField] float baseDamage = 10f;
         float lastHitTime;
+
+        // Abilities
+        [Header("Abilities")]
+        [SerializeField] SpecialAbility[] abilities;
+        float abilityRange = 2f;
+
+        // Health
+        [Header("Health")]
+        [SerializeField] float maxHealthPoints = 100f;
         float currentHealthPoints = 100f;
         public float HealthAsPercentage
         {
@@ -34,12 +41,17 @@ namespace RPG.Characters
 
         void Start ()
         {
+            Setup();
+            abilities[0].AttachComponentTo(gameObject);
+        }
+
+        #region Setup
+        private void Setup ()
+        {
             RegisterForMouseClicks();
             PutWeaponInHand();
             SetupAnimator();
-            currentHealthPoints = maxHealthPoints;
         }
-
         private void SetupAnimator ()
         {
             animator = GetComponent<Animator>();
@@ -65,12 +77,18 @@ namespace RPG.Characters
             return dominantHands[0].gameObject;
         }
 
+        private void SetHealth ()
+        {
+            currentHealthPoints = maxHealthPoints;
+        }
+
         private void RegisterForMouseClicks ()
         {
-            cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
+            CameraRaycaster cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
             cameraRaycaster.notifyMouseOverEnemy += OnMouseOverEnemy;
         }
-   
+    #endregion
+
         void OnMouseOverEnemy (Enemy enemy)
         {
             if (enemy != null)
@@ -79,7 +97,22 @@ namespace RPG.Characters
                 if (Input.GetMouseButtonDown(0))
                 {
                     InvokeRepeating("AttackTarget", 0, .1f);
+                } else if (Input.GetMouseButtonDown(1))
+                {
+                    AttemptSpecialAbility(enemy, 0);
                 }
+            }
+        }
+
+        void AttemptSpecialAbility (Enemy enemy, int abilityIndex)
+        {
+            Energy energy = GetComponent<Energy>();
+            var energyCost = abilities[abilityIndex].GetEnergyCost();
+            if (IsInAbilityRange(currentTarget) && energy.IsEnergyAvailable(energyCost))
+            {
+                energy.UseEnergy(energyCost);
+                var abilityParams = new AbilityUseParams(enemy, baseDamage);
+                abilities[abilityIndex].Use(abilityParams);
             }
         }
 
@@ -87,10 +120,10 @@ namespace RPG.Characters
         {
             if (currentTarget != null)
             {
-                if (Time.time - lastHitTime > weaponInUse.GetSecondsBetweenHits() && IsInRange(currentTarget))
+                if (Time.time - lastHitTime > weaponInUse.GetSecondsBetweenHits() && IsInWeaponRange(currentTarget))
                 {
                     animator.SetTrigger("Attack"); // TODO Make const
-                    currentTarget.GetComponent<Enemy>().TakeDamage(attackDamage);
+                    currentTarget.GetComponent<Enemy>().TakeDamage(baseDamage);
                     lastHitTime = Time.time;
                 }
             } else
@@ -99,11 +132,19 @@ namespace RPG.Characters
             }
         }
 
-        private bool IsInRange (GameObject target)
+        #region Range Checks
+        private bool IsInWeaponRange (GameObject target)
         {
             bool isInRange = Vector3.Distance(transform.position, target.transform.position) <= weaponInUse.GetAttackRange();
             return isInRange;
         }
+
+        private bool IsInAbilityRange (GameObject target)
+        {
+            bool isinRange = Vector3.Distance(transform.position, target.transform.position) <= abilityRange;
+            return isinRange;
+        }
+        #endregion
 
         public void TakeDamage (float damage)
         {

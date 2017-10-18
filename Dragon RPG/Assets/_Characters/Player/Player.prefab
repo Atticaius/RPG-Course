@@ -82,12 +82,12 @@ GameObject:
   - component: {fileID: 95468679155182784}
   - component: {fileID: 54278291809460898}
   - component: {fileID: 136565877553513888}
-  - component: {fileID: 114258099008598276}
   - component: {fileID: 195290969485580424}
+  - component: {fileID: 114258099008598276}
   - component: {fileID: 114236517281041938}
   - component: {fileID: 114341307543172760}
-  - component: {fileID: 114635305671577738}
   - component: {fileID: 114588294270600956}
+  - component: {fileID: 114635305671577738}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -718,7 +718,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   energyBar: {fileID: 0}
   maxEnergyPoints: 100
-  pointsPerHit: 10
 --- !u!114 &114635305671577738
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -732,9 +731,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animatorOverrideController: {fileID: 22100000, guid: 0211a4a030d9fc04a971f3a5cd629d20,
     type: 2}
-  maxHealthPoints: 100
   weaponInUse: {fileID: 11400000, guid: dcd86c11d70590c4eb58c5fe1e85a72f, type: 2}
   attackDamage: 10
+  abilities:
+  - {fileID: 11400000, guid: 48b41175839a48841a346266b8e7074e, type: 2}
+  maxHealthPoints: 100
 --- !u!114 &114807288060115498
 MonoBehaviour:
   m_ObjectHideFlags: 1
