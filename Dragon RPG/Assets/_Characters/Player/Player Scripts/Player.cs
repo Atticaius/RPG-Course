@@ -63,6 +63,7 @@ namespace RPG.Characters
             PutWeaponInHand();
             SetupAnimator();
             audioSource = GetComponent<AudioSource>();
+            SetHealth();
         }
         private void SetupAnimator ()
         {

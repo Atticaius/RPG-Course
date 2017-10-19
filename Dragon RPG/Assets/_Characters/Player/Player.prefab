@@ -816,6 +816,7 @@ MonoBehaviour:
   weaponInUse: {fileID: 11400000, guid: dcd86c11d70590c4eb58c5fe1e85a72f, type: 2}
   baseDamage: 10
   abilities:
+  - {fileID: 11400000, guid: 48b41175839a48841a346266b8e7074e, type: 2}
   - {fileID: 11400000, guid: 4a7e5d7c59362554780299e9b300d49e, type: 2}
   damageSounds:
   - {fileID: 8300000, guid: 0a4a49d731dcf6b4a8b70e76ca0cc368, type: 3}
@@ -828,7 +829,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a428409d0f7a3754796d291ec42b0f71, type: 3}
   - {fileID: 8300000, guid: 4b384ce86897d2244b0a498860503918, type: 3}
   - {fileID: 8300000, guid: c115193d5b3446a4a9d1803a981d11d1, type: 3}
-  maxHealthPoints: 100
+  maxHealthPoints: 1000
 --- !u!114 &114807288060115498
 MonoBehaviour:
   m_ObjectHideFlags: 1
