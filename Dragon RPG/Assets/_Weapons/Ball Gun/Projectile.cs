@@ -26,7 +26,7 @@ namespace RPG.Weapons
         // Constants
         const float DEFAULT_DELAY = 10f;
         const float DESTROY_DELAY = .3f;
-
+        
         public void FireProjectile (GameObject shotFrom, Vector3 unitVectorToTarget, float damage = DEFAULT_DELAY)
         {
             myRigidbody = GetComponent<Rigidbody>();
@@ -37,10 +37,10 @@ namespace RPG.Weapons
 
         private void OnCollisionEnter (Collision other)
         {
-            if (shooter.layer != other.gameObject.layer)
+            if (shooter != null && shooter.layer != other.gameObject.layer)
             {
                 DamageIfDamageable(other);
-            }
+            } 
         }
 
         private void DamageIfDamageable (Collision other)

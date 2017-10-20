@@ -18,3 +18,4 @@ MonoBehaviour:
     type: 2}
   attackRange: 3
   secondsBetweenHits: 1
+  additionalDamage: 10

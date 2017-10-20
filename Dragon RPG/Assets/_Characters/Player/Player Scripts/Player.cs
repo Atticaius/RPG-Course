@@ -24,12 +24,15 @@ namespace RPG.Characters
         // Weapons
         [Header("Weapon")]
         [SerializeField] Weapon weaponInUse;
+        [SerializeField] ParticleSystem criticalHitParticles;
         [SerializeField] float baseDamage = 10f;
+        [Range(.1f, 1f)] [SerializeField] float critChance = .1f;
+        [SerializeField] float critMultiplier = 1.5f;
         float lastHitTime;
 
         // Abilities
         [Header("")]
-        [SerializeField] SpecialAbility[] abilities;
+        [SerializeField] AbilityConfig[] abilities;
         float abilityRange = 2f;
 
         // Sounds
@@ -40,8 +43,8 @@ namespace RPG.Characters
 
         // Health
         [Header("Health")]
-        [SerializeField] float maxHealthPoints = 100f;
-        float currentHealthPoints = 100f;
+        [SerializeField]public float maxHealthPoints = 100f;
+        public float currentHealthPoints = 100f;
         public float HealthAsPercentage
         {
             get
@@ -49,21 +52,55 @@ namespace RPG.Characters
                 return currentHealthPoints / maxHealthPoints;
             }
         }
+        public float GetHealthDifference
+        {
+            get
+            {
+                return maxHealthPoints - currentHealthPoints;
+            }
+        }
 
         void Start ()
         {
             Setup();
-            abilities[0].AttachComponentTo(gameObject);
+        }
+
+        void LateUpdate ()
+        {
+            if (HealthAsPercentage > Mathf.Epsilon)
+            {
+                ScanForAbilityKeyDown();
+            }
+        }
+
+        void ScanForAbilityKeyDown ()
+        {
+            for (int keyIndex = 1; keyIndex < abilities.Length; keyIndex++)
+            {
+                if (Input.GetKeyDown(keyIndex.ToString()))
+                {
+                    AttemptSpecialAbility(keyIndex);
+                }
+            }
         }
 
     #region Setup
         private void Setup ()
         {
+            audioSource = GetComponent<AudioSource>();
+            AttachAbilities();
             RegisterForMouseClicks();
             PutWeaponInHand();
             SetupAnimator();
-            audioSource = GetComponent<AudioSource>();
             SetHealth();
+        }
+
+        void AttachAbilities ()
+        {
+            for (int abilityIndex = 0; abilityIndex < abilities.Length; abilityIndex++)
+            {
+                abilities[abilityIndex].AttachComponentTo(gameObject);
+            }
         }
         private void SetupAnimator ()
         {
@@ -127,19 +164,25 @@ namespace RPG.Characters
                     InvokeRepeating("AttackTarget", 0, .1f);
                 } else if (Input.GetMouseButtonDown(1))
                 {
-                    AttemptSpecialAbility(enemy, 0);
+                    AttemptSpecialAbility(0);
                 }
             }
         }
 
-        void AttemptSpecialAbility (Enemy enemy, int abilityIndex)
+        void AttemptSpecialAbility (int abilityIndex)
         {
             Energy energy = GetComponent<Energy>();
+            if (currentTarget == null)
+            {
+                currentTarget = gameObject;
+            }
+            
             var energyCost = abilities[abilityIndex].GetEnergyCost();
-            if (IsInAbilityRange(currentTarget) && energy.IsEnergyAvailable(energyCost))
+
+            if (IsInAbilityRange(currentTarget.gameObject) && energy.IsEnergyAvailable(energyCost))
             {
                 energy.UseEnergy(energyCost);
-                var abilityParams = new AbilityUseParams(enemy, baseDamage);
+                var abilityParams = new AbilityUseParams(currentTarget.GetComponent<IDamageable>(), baseDamage);
                 abilities[abilityIndex].Use(abilityParams);
             }
         }
@@ -148,15 +191,29 @@ namespace RPG.Characters
         {
             if (currentTarget != null)
             {
-                if (Time.time - lastHitTime > weaponInUse.GetSecondsBetweenHits() && IsInWeaponRange(currentTarget))
+                if (Time.time - lastHitTime > weaponInUse.GetSecondsBetweenHits() && IsInWeaponRange(currentTarget.gameObject))
                 {
-                    animator.SetTrigger(ATTACK_TRIGGER); // TODO Make const
-                    currentTarget.GetComponent<Enemy>().TakeDamage(baseDamage);
+                    animator.SetTrigger(ATTACK_TRIGGER);
+                    currentTarget.gameObject.GetComponent<IDamageable>().TakeDamage(CalculateDamage());
                     lastHitTime = Time.time;
                 }
             } else
             {
                 CancelInvoke();
+            }
+        }
+
+        float CalculateDamage ()
+        {
+            float damageBeforeCrit = baseDamage + weaponInUse.GetAdditionalDamage();
+            bool isCrit = UnityEngine.Random.Range(0, 1f) < critChance;
+            if (isCrit)
+            {
+                criticalHitParticles.Play();
+                return damageBeforeCrit * critMultiplier;
+            } else
+            {
+                return damageBeforeCrit;
             }
         }
 #endregion
@@ -165,37 +222,27 @@ namespace RPG.Characters
         public void TakeDamage (float damage)
         {
             bool playerDies = currentHealthPoints - damage <= 0;
-            ReduceHealth(damage);
+            currentHealthPoints = Mathf.Clamp(currentHealthPoints - damage, 0, maxHealthPoints);
             if (playerDies)
             {
                 StartCoroutine(KillPlayer());
             } else
             {
-                PlayDamageSound();
+                audioSource.clip = damageSounds[UnityEngine.Random.Range(0, damageSounds.Length)];
+                audioSource.Play();
             }
         }
 
-        void ReduceHealth (float damage)
+        public void Heal(float points)
         {
-            currentHealthPoints = Mathf.Clamp(currentHealthPoints - damage, 0, maxHealthPoints);
-        }
-
-        void PlayDamageSound ()
-        {
-            audioSource.clip = damageSounds[UnityEngine.Random.Range(0, damageSounds.Length)];
-            audioSource.Play();
-        }
-
-        void PlayDeathSound ()
-        {
-            audioSource.clip = deathSounds[UnityEngine.Random.Range(0, deathSounds.Length)];
-            audioSource.Play();
+            currentHealthPoints = Mathf.Clamp(currentHealthPoints + points, 0, maxHealthPoints);
         }
 
         IEnumerator KillPlayer()
         {
             animator.SetTrigger(DEATH_TRIGGER);
-            PlayDeathSound();
+            audioSource.clip = deathSounds[UnityEngine.Random.Range(0, deathSounds.Length)];
+            audioSource.Play();
             yield return new WaitForSecondsRealtime(audioSource.clip.length);
             SceneManager.LoadScene(0);
         }

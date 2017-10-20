@@ -23,13 +23,10 @@ namespace RPG.Characters
 
         private void PlayParticleEffect ()
         {
-            // Instantiate particle system attached to player
-            GameObject newParticleSystem = Instantiate(config.GetParticlePrefab(), transform.position, Quaternion.identity);
-            // Get particle system component
+            var particlePrefab = config.GetParticlePrefab();
+            GameObject newParticleSystem = Instantiate(particlePrefab, transform.position, particlePrefab.transform.rotation);
             ParticleSystem myParticleSystem = newParticleSystem.GetComponent<ParticleSystem>();
-            // Play particle system
             myParticleSystem.Play();
-            // Destroy after duration
             Destroy(newParticleSystem, myParticleSystem.main.duration);
         }
 
@@ -41,7 +38,8 @@ namespace RPG.Characters
             foreach (RaycastHit objectHit in objectHits)
             {
                 IDamageable damageable = objectHit.collider.gameObject.GetComponent<IDamageable>();
-                if (damageable != null)
+                bool hitPlayer = objectHit.collider.gameObject.GetComponent<Player>();
+                if (damageable != null && !hitPlayer)
                 {
                     damageable.TakeDamage(damageToDeal);
                 }

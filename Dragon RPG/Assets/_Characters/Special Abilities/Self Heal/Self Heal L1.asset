@@ -8,12 +8,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 986bed07f6e06ee499230c4ff8e2e11d, type: 3}
-  m_Name: Area Of Effect L1
+  m_Script: {fileID: 11500000, guid: ba6e2262356483048b1995050677c783, type: 3}
+  m_Name: Self Heal L1
   m_EditorClassIdentifier: 
   energyCost: 10
-  particlePrefab: {fileID: 1736960750490476, guid: bcebb5ad730e23b4b8c2fe987b765ed6,
+  particlePrefab: {fileID: 1770094935522392, guid: 7098bdbdcde165049872f566c6a00e5f,
     type: 2}
-  audioClip: {fileID: 0}
-  radius: 5
-  damageToEachTarget: 20
+  audioClip: {fileID: 8300000, guid: 2002d648286caf94ba451573ff7e1571, type: 3}
+  extraHealth: 50

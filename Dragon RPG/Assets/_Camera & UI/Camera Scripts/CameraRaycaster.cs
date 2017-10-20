@@ -69,6 +69,26 @@ namespace RPG.CameraUI
             return false;
         }
 
+        // TODO Get Working
+        //bool RaycastForPlayer (Ray ray)
+        //{
+        //    RaycastHit hitInfo;
+        //    Physics.Raycast(ray, out hitInfo, MAX_RAYCAST_DEPTH);
+        //    if (hitInfo.collider == null)
+        //    {
+        //        return false;
+        //    }
+        //    else if (hitInfo.collider.gameObject.GetComponent<Player>())
+        //    {
+        //        GameObject gameObjectHit = hitInfo.collider.gameObject;
+        //        Cursor.SetCursor(walkCursor, hotSpot, CursorMode.Auto);
+        //        Player player = gameObjectHit.GetComponent<Player>();
+        //        notifyMouseOverPlayer(player);
+        //        return true;
+        //    }
+        //    return false;
+        //}
+
         bool RaycastForPotentiallyWalkable (Ray ray)
         {
             RaycastHit hitInfo;

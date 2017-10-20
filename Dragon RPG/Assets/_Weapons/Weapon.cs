@@ -12,6 +12,7 @@ namespace RPG.Weapons
         public Transform gripTransform;
         [SerializeField] float attackRange = 3f;
         [SerializeField] float secondsBetweenHits = 3f;
+        [SerializeField] float additionalDamage = 10f;
 
         public float GetSecondsBetweenHits ()
         {
@@ -32,6 +33,11 @@ namespace RPG.Weapons
         {
             RemoveAnimationEvents();
             return attackAnimation;
+        }
+
+        public float GetAdditionalDamage ()
+        {
+            return additionalDamage;
         }
 
         // Clears animation events so asset packs can't cause bugs

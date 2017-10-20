@@ -5,7 +5,7 @@ using UnityEngine;
 namespace RPG.Characters
 {
     [CreateAssetMenu(menuName = ("RPG/Special Ability/Area of Effect"))]
-    public class AreaOfEffectConfig : SpecialAbility
+    public class AreaOfEffectConfig : AbilityConfig
     {
         [Header("Area of Effect Specific")]
         [SerializeField]
