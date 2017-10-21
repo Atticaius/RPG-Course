@@ -14,6 +14,6 @@ MonoBehaviour:
   energyCost: 10
   particlePrefab: {fileID: 1736960750490476, guid: bcebb5ad730e23b4b8c2fe987b765ed6,
     type: 2}
-  audioClip: {fileID: 0}
+  audioClip: {fileID: 8300000, guid: 62cac94de77b8bb47b19225e069796d2, type: 3}
   radius: 5
   damageToEachTarget: 20

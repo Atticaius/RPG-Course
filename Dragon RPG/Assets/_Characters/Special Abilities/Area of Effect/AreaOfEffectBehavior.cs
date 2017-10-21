@@ -6,34 +6,20 @@ using System;
 
 namespace RPG.Characters
 {
-    public class AreaOfEffectBehavior : MonoBehaviour, ISpecialAbility
+    public class AreaOfEffectBehavior : AbilityBehavior
     {
-        AreaOfEffectConfig config;
 
-        public void SetConfig(AreaOfEffectConfig configToSet)
+        public override void Use (AbilityUseParams abilityUseParams)
         {
-            config = configToSet;
-        }
-
-        public void Use(AbilityUseParams abilityUseParams)
-        {
-            DealRadialDamage(abilityUseParams);
+            PlayAbilitySound();
             PlayParticleEffect();
-        }
-
-        private void PlayParticleEffect ()
-        {
-            var particlePrefab = config.GetParticlePrefab();
-            GameObject newParticleSystem = Instantiate(particlePrefab, transform.position, particlePrefab.transform.rotation);
-            ParticleSystem myParticleSystem = newParticleSystem.GetComponent<ParticleSystem>();
-            myParticleSystem.Play();
-            Destroy(newParticleSystem, myParticleSystem.main.duration);
+            DealRadialDamage(abilityUseParams);
         }
 
         private void DealRadialDamage (AbilityUseParams abilityUseParams)
         {
-            float damageToDeal = config.GetExtraDamage() + abilityUseParams.baseDamage;
-            float radius = config.GetRadius();
+            float damageToDeal = (config as AreaOfEffectConfig).GetExtraDamage() + abilityUseParams.baseDamage;
+            float radius = (config as AreaOfEffectConfig).GetRadius();
             RaycastHit[] objectHits = Physics.SphereCastAll(transform.position, radius, Vector3.up, radius);
             foreach (RaycastHit objectHit in objectHits)
             {

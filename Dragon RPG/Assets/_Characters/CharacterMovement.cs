@@ -6,17 +6,15 @@ using RPG.CameraUI;
 namespace RPG.Characters
 {
     [RequireComponent(typeof(ThirdPersonCharacter))]
-    public class PlayerMovement : MonoBehaviour
+    public class CharacterMovement : MonoBehaviour
     {
         // Object References
-        AICharacterControl aiCharacterControl;
-        ThirdPersonCharacter thirdPersonCharacter;
-        CameraRaycaster cameraRaycaster;
+        ThirdPersonCharacter character;
         Camera mainCamera;
-        NavMeshAgent navMeshAgent;
-        GameObject walkTarget;
+        NavMeshAgent agent;
 
         // Variables
+        [SerializeField] float stoppingDistance = 1.5f;
         public String controlMode;
         Vector3 currentClickTarget;
         bool isInDirectMovement = false;
@@ -28,12 +26,17 @@ namespace RPG.Characters
         private void Start ()
         {
             // Object references
-            thirdPersonCharacter = GetComponent<ThirdPersonCharacter>();
-            cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
-            aiCharacterControl = GetComponent<AICharacterControl>();
-            navMeshAgent = GetComponent<NavMeshAgent>();
+            character = GetComponent<ThirdPersonCharacter>();
+
+            // Camera
             mainCamera = Camera.main;
-            walkTarget = new GameObject("Walk Target");
+            CameraRaycaster cameraRaycaster = mainCamera.GetComponent<CameraRaycaster>();
+
+            // NavMeshAgent
+            agent = GetComponent<NavMeshAgent>();
+            agent.updateRotation = false;
+            agent.updatePosition = true;
+            agent.stoppingDistance = stoppingDistance;
 
             // Delegate controls
             cameraRaycaster.notifyMouseOverPotentiallyWalkable += OnMouseOverWalkable;
@@ -42,15 +45,33 @@ namespace RPG.Characters
             ControlModeDelegate(controlMode);
         }
 
+        private void Update ()
+        {
+            if (!isInDirectMovement)
+            {
+                if (agent.remainingDistance > agent.stoppingDistance)
+                {
+                    character.Move(agent.desiredVelocity);
+                }
+                else
+                {
+                    character.Move(Vector3.zero);
+                }
+            }
+        }
+
         private void LateUpdate ()
+        {
+            HandleKeyPresses();
+        }
+
+        private void HandleKeyPresses ()
         {
             if (Input.GetKeyUp(KeyCode.G))
             {
                 // Enable/disable automatic controls
                 isInDirectMovement = !isInDirectMovement;
-                aiCharacterControl.enabled = !aiCharacterControl.enabled;
-                navMeshAgent.enabled = !navMeshAgent.enabled;
-                aiCharacterControl.SetTarget(null);
+                agent.enabled = !agent.enabled;
 
                 // Check control mode and send to delegates
                 CheckControlMode();
@@ -85,15 +106,14 @@ namespace RPG.Characters
             var camForward = Vector3.Scale(mainCamera.transform.forward, new Vector3(1, 0, 1)).normalized;
             var move = v * camForward + h * mainCamera.transform.right;
 
-            thirdPersonCharacter.Move(move);
+            character.Move(move);
         }
 
         void OnMouseOverWalkable (Vector3 destination)
         {
             if (Input.GetMouseButton(0) && !isInDirectMovement)
             {
-                walkTarget.transform.position = destination;
-                aiCharacterControl.SetTarget(walkTarget.transform);
+                agent.SetDestination(destination);
             }
         }
 
@@ -103,10 +123,9 @@ namespace RPG.Characters
             {
                 if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
                 {
-                    aiCharacterControl.SetTarget(enemy.transform);
+                    agent.SetDestination(enemy.transform.position);
                 }
             }
-            
         }
     }
 }

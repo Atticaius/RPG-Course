@@ -10,12 +10,12 @@ namespace RPG.CameraUI
     {
 
         [SerializeField] Text text;
-        private PlayerMovement playerMovement;
+        private CharacterMovement playerMovement;
         // Use this for initialization
         void Awake ()
         {
             text = GetComponentInChildren<Text>();
-            playerMovement = FindObjectOfType<PlayerMovement>();
+            playerMovement = FindObjectOfType<CharacterMovement>();
             playerMovement.ControlModeDelegate += onControlModeChange;
         }
 

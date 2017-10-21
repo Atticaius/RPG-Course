@@ -6,7 +6,6 @@ using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 using RPG.CameraUI;
 using RPG.Core;
-using RPG.Weapons;
 
 namespace RPG.Characters
 {
@@ -19,31 +18,37 @@ namespace RPG.Characters
         [SerializeField] AnimatorOverrideController animatorOverrideController;
         const string ATTACK_TRIGGER = "Attack";
         const string DEATH_TRIGGER = "Death";
+        const string DEFAULT_ATTACK = "Default Attack";
         Animator animator;
 
         // Weapons
         [Header("Weapon")]
-        [SerializeField] Weapon weaponInUse;
+        [SerializeField]
+        Weapon currentWeaponConfig;
         [SerializeField] ParticleSystem criticalHitParticles;
         [SerializeField] float baseDamage = 10f;
         [Range(.1f, 1f)] [SerializeField] float critChance = .1f;
         [SerializeField] float critMultiplier = 1.5f;
         float lastHitTime;
+        GameObject weaponObject;
 
         // Abilities
         [Header("")]
-        [SerializeField] AbilityConfig[] abilities;
+        [SerializeField]
+        AbilityConfig[] abilities;
         float abilityRange = 2f;
 
         // Sounds
         [Header("Sounds")]
-        [SerializeField] AudioClip[] damageSounds;
+        [SerializeField]
+        AudioClip[] damageSounds;
         [SerializeField] AudioClip[] deathSounds;
         AudioSource audioSource;
 
         // Health
         [Header("Health")]
-        [SerializeField]public float maxHealthPoints = 100f;
+        [SerializeField]
+        public float maxHealthPoints = 100f;
         public float currentHealthPoints = 100f;
         public float HealthAsPercentage
         {
@@ -84,14 +89,25 @@ namespace RPG.Characters
             }
         }
 
-    #region Setup
+        public void PutWeaponInHand (Weapon weaponToUse)
+        {
+            currentWeaponConfig = weaponToUse;
+            var weaponPrefab = weaponToUse.GetWeaponPrefab();
+            GameObject dominantHand = RequestDominantHand();
+            Destroy(weaponObject);
+            weaponObject = Instantiate(weaponPrefab, dominantHand.transform);
+            weaponObject.transform.localPosition = currentWeaponConfig.gripTransform.localPosition;
+            weaponObject.transform.localRotation = currentWeaponConfig.gripTransform.localRotation;
+        }
+
+        #region Setup
         private void Setup ()
         {
             audioSource = GetComponent<AudioSource>();
             AttachAbilities();
             RegisterForMouseClicks();
-            PutWeaponInHand();
-            SetupAnimator();
+            PutWeaponInHand(currentWeaponConfig);
+            SetAttackAnimator();
             SetHealth();
         }
 
@@ -99,23 +115,14 @@ namespace RPG.Characters
         {
             for (int abilityIndex = 0; abilityIndex < abilities.Length; abilityIndex++)
             {
-                abilities[abilityIndex].AttachComponentTo(gameObject);
+                abilities[abilityIndex].AttachAbilityTo(gameObject);
             }
         }
-        private void SetupAnimator ()
+        private void SetAttackAnimator ()
         {
             animator = GetComponent<Animator>();
             animator.runtimeAnimatorController = animatorOverrideController;
-            animatorOverrideController["DEFAULT ATTACK"] = weaponInUse.GetAnimClip();
-        }
-
-        private void PutWeaponInHand ()
-        {
-            var weaponPrefab = weaponInUse.GetWeaponPrefab();
-            GameObject dominantHand = RequestDominantHand();
-            var weapon = Instantiate(weaponPrefab, dominantHand.transform);
-            weapon.transform.localPosition = weaponInUse.gripTransform.localPosition;
-            weapon.transform.localRotation = weaponInUse.gripTransform.localRotation;
+            animatorOverrideController[DEFAULT_ATTACK] = currentWeaponConfig.GetAnimClip();
         }
 
         private GameObject RequestDominantHand ()
@@ -139,10 +146,10 @@ namespace RPG.Characters
         }
         #endregion
 
-    #region Range Checks
+        #region Range Checks
         private bool IsInWeaponRange (GameObject target)
         {
-            bool isInRange = Vector3.Distance(transform.position, target.transform.position) <= weaponInUse.GetAttackRange();
+            bool isInRange = Vector3.Distance(transform.position, target.transform.position) <= currentWeaponConfig.GetAttackRange();
             return isInRange;
         }
 
@@ -151,9 +158,9 @@ namespace RPG.Characters
             bool isinRange = Vector3.Distance(transform.position, target.transform.position) <= abilityRange;
             return isinRange;
         }
-    #endregion
+        #endregion
 
-    #region Attacking and Special Abilities
+        #region Attacking and Special Abilities
         void OnMouseOverEnemy (Enemy enemy)
         {
             if (enemy != null)
@@ -162,7 +169,8 @@ namespace RPG.Characters
                 if (Input.GetMouseButtonDown(0))
                 {
                     InvokeRepeating("AttackTarget", 0, .1f);
-                } else if (Input.GetMouseButtonDown(1))
+                }
+                else if (Input.GetMouseButtonDown(1))
                 {
                     AttemptSpecialAbility(0);
                 }
@@ -176,7 +184,7 @@ namespace RPG.Characters
             {
                 currentTarget = gameObject;
             }
-            
+
             var energyCost = abilities[abilityIndex].GetEnergyCost();
 
             if (IsInAbilityRange(currentTarget.gameObject) && energy.IsEnergyAvailable(energyCost))
@@ -191,13 +199,15 @@ namespace RPG.Characters
         {
             if (currentTarget != null)
             {
-                if (Time.time - lastHitTime > weaponInUse.GetSecondsBetweenHits() && IsInWeaponRange(currentTarget.gameObject))
+                if (Time.time - lastHitTime > currentWeaponConfig.GetSecondsBetweenHits() && IsInWeaponRange(currentTarget.gameObject))
                 {
+                    SetAttackAnimator();
                     animator.SetTrigger(ATTACK_TRIGGER);
                     currentTarget.gameObject.GetComponent<IDamageable>().TakeDamage(CalculateDamage());
                     lastHitTime = Time.time;
                 }
-            } else
+            }
+            else
             {
                 CancelInvoke();
             }
@@ -205,20 +215,21 @@ namespace RPG.Characters
 
         float CalculateDamage ()
         {
-            float damageBeforeCrit = baseDamage + weaponInUse.GetAdditionalDamage();
+            float damageBeforeCrit = baseDamage + currentWeaponConfig.GetAdditionalDamage();
             bool isCrit = UnityEngine.Random.Range(0, 1f) < critChance;
             if (isCrit)
             {
                 criticalHitParticles.Play();
                 return damageBeforeCrit * critMultiplier;
-            } else
+            }
+            else
             {
                 return damageBeforeCrit;
             }
         }
-#endregion
+        #endregion
 
-    #region Taking Damage
+        #region Taking Damage
         public void TakeDamage (float damage)
         {
             bool playerDies = currentHealthPoints - damage <= 0;
@@ -226,19 +237,20 @@ namespace RPG.Characters
             if (playerDies)
             {
                 StartCoroutine(KillPlayer());
-            } else
+            }
+            else
             {
                 audioSource.clip = damageSounds[UnityEngine.Random.Range(0, damageSounds.Length)];
                 audioSource.Play();
             }
         }
 
-        public void Heal(float points)
+        public void Heal (float points)
         {
             currentHealthPoints = Mathf.Clamp(currentHealthPoints + points, 0, maxHealthPoints);
         }
 
-        IEnumerator KillPlayer()
+        IEnumerator KillPlayer ()
         {
             animator.SetTrigger(DEATH_TRIGGER);
             audioSource.clip = deathSounds[UnityEngine.Random.Range(0, deathSounds.Length)];
@@ -246,6 +258,6 @@ namespace RPG.Characters
             yield return new WaitForSecondsRealtime(audioSource.clip.length);
             SceneManager.LoadScene(0);
         }
-#endregion
+        #endregion
     }
 }

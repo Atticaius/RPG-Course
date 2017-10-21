@@ -102,7 +102,6 @@ GameObject:
   - component: {fileID: 195290969485580424}
   - component: {fileID: 82556950042606950}
   - component: {fileID: 114258099008598276}
-  - component: {fileID: 114236517281041938}
   - component: {fileID: 114341307543172760}
   - component: {fileID: 114588294270600956}
   - component: {fileID: 114635305671577738}
@@ -774,18 +773,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114236517281041938
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1296489112970354}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c5335f0882fe4d478883cc8c58ce906, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
 --- !u!114 &114258099008598276
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -816,6 +803,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73a98769001244a408b18a08109df8fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stoppingDistance: 1.5
   controlMode: 
 --- !u!114 &114588294270600956
 MonoBehaviour:
@@ -844,7 +832,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animatorOverrideController: {fileID: 22100000, guid: 0211a4a030d9fc04a971f3a5cd629d20,
     type: 2}
-  weaponInUse: {fileID: 11400000, guid: dcd86c11d70590c4eb58c5fe1e85a72f, type: 2}
+  currentWeaponConfig: {fileID: 11400000, guid: dcd86c11d70590c4eb58c5fe1e85a72f,
+    type: 2}
   criticalHitParticles: {fileID: 198156440389713404}
   baseDamage: 10
   critChance: 0.2

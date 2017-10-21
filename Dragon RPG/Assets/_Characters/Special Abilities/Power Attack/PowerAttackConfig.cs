@@ -11,11 +11,9 @@ namespace RPG.Characters
         [SerializeField]
         float extraDamage = 10f;
 
-        public override void AttachComponentTo (GameObject gameObjectToAttachTo)
+        public override AbilityBehavior GetBehaviorComponent (GameObject objectToAttachTo)
         {
-            PowerAttackBehavior behaviorComponent = gameObjectToAttachTo.AddComponent<PowerAttackBehavior>();
-            behaviorComponent.SetConfig(this);
-            behavior = behaviorComponent;
+            return objectToAttachTo.AddComponent<PowerAttackBehavior>();
         }
 
         public float GetExtraDamage ()

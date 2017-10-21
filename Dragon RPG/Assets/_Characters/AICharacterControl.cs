@@ -27,12 +27,12 @@ namespace RPG.Characters
                 agent.SetDestination(target.position);
 
             if (agent.remainingDistance > agent.stoppingDistance)
-                character.Move(agent.desiredVelocity, false, false);
+                character.Move(agent.desiredVelocity);
             else
             {
                 if (GetComponent<Enemy>())
                 agent.velocity = Vector3.zero;
-                character.Move(Vector3.zero, false, false);
+                character.Move(Vector3.zero);
             }
         }
 
