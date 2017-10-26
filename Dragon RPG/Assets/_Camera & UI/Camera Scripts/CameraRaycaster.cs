@@ -22,7 +22,7 @@ namespace RPG.CameraUI
         public delegate void OnMouseOverTerrain (Vector3 Destination);
         public event OnMouseOverTerrain notifyMouseOverPotentiallyWalkable;
 
-        public delegate void OnMouseOverEnemy (Enemy enemy);
+        public delegate void OnMouseOverEnemy (EnemyAI enemy);
         public event OnMouseOverEnemy notifyMouseOverEnemy;
 
         void LateUpdate ()
@@ -58,36 +58,16 @@ namespace RPG.CameraUI
             if (hitInfo.collider == null)
             {
                 return false;
-            } else if (hitInfo.collider.gameObject.GetComponent<Enemy>())
+            } else if (hitInfo.collider.gameObject.GetComponent<EnemyAI>())
             {
                 GameObject gameObjectHit = hitInfo.collider.gameObject;
                 Cursor.SetCursor(enemyCursor, hotSpot, CursorMode.Auto);
-                Enemy enemy = gameObjectHit.GetComponent<Enemy>();
+                EnemyAI enemy = gameObjectHit.GetComponent<EnemyAI>();
                 notifyMouseOverEnemy(enemy);
                 return true;
             }
             return false;
         }
-
-        // TODO Get Working
-        //bool RaycastForPlayer (Ray ray)
-        //{
-        //    RaycastHit hitInfo;
-        //    Physics.Raycast(ray, out hitInfo, MAX_RAYCAST_DEPTH);
-        //    if (hitInfo.collider == null)
-        //    {
-        //        return false;
-        //    }
-        //    else if (hitInfo.collider.gameObject.GetComponent<Player>())
-        //    {
-        //        GameObject gameObjectHit = hitInfo.collider.gameObject;
-        //        Cursor.SetCursor(walkCursor, hotSpot, CursorMode.Auto);
-        //        Player player = gameObjectHit.GetComponent<Player>();
-        //        notifyMouseOverPlayer(player);
-        //        return true;
-        //    }
-        //    return false;
-        //}
 
         bool RaycastForPotentiallyWalkable (Ray ray)
         {

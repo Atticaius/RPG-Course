@@ -12,6 +12,14 @@ namespace RPG.Characters
         [SerializeField] RuntimeAnimatorController animatorController;
         [SerializeField] AnimatorOverrideController animatorOverrideController;
         [SerializeField] Avatar characterAvatar;
+        [SerializeField] float moveThreshold = 1f;
+        public AnimatorOverrideController GetOverrideController
+        {
+            get
+            {
+                return animatorOverrideController;
+            }
+        }
         Animator animator;
 
         [Header("Audio")]
@@ -25,23 +33,21 @@ namespace RPG.Characters
         [Header("Movement")]
         [SerializeField] float navMeshStoppingDistance = 1.5f;
         [SerializeField] float moveSpeedMultiplier;
-        
-        
+        [SerializeField] float movingTurnSpeed = 360;
+        [SerializeField] float stationaryTurnSpeed = 180;
+        float turnAmount;
+        float forwardAmount;
         PlayerMovement playerMovement;
         Rigidbody myRigidbody;
         NavMeshAgent navMeshAgent;
         
-        string controlMode;
+        
         [HideInInspector] public bool isInDirectMovement = false;
         bool isAlive = true;
 
         // Camera
         Camera mainCamera;
         CameraRaycaster cameraRaycaster;
-
-        // Delegate
-        public delegate void ChangedControlMode (String text);
-        public event ChangedControlMode ControlModeDelegate;
 
         #region Setup
         void Awake ()
@@ -62,8 +68,6 @@ namespace RPG.Characters
             audioSource.playOnAwake = false;
             audioSource.spatialBlend = spatialBlend;
 
-            
-
             // Capsule Collider
             CapsuleCollider capsuleCollider = gameObject.AddComponent<CapsuleCollider>();
             capsuleCollider.center = capsuleCenter;
@@ -81,64 +85,29 @@ namespace RPG.Characters
             myRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             myRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
         }
-        
+
         private void Start ()
         {
-            // Delegate controls
-            //cameraRaycaster.notifyMouseOverPotentiallyWalkable += OnMouseOverWalkable;
-            //cameraRaycaster.notifyMouseOverEnemy += OnMouseOverEnemy;
             playerMovement = GetComponent<PlayerMovement>();
-            CheckControlMode();
-            ControlModeDelegate(controlMode);
         }
         #endregion
-
-        #region KeyPresses
-        private void LateUpdate ()
-        {
-            HandleKeyPresses();
-        }
-
-        private void HandleKeyPresses ()
-        {
-            if (Input.GetKeyUp(KeyCode.G))
-            {
-                // Enable/disable automatic controls
-                isInDirectMovement = !isInDirectMovement;
-                navMeshAgent.enabled = !navMeshAgent.enabled;
-
-                // Check control mode and send to delegates
-                CheckControlMode();
-                ControlModeDelegate(controlMode);
-            }
-        }
-        #endregion
-
-        #region Update Control Mode
-        private void FixedUpdate ()
-        {
-            CheckControlMode();
-        }
-
-        private void CheckControlMode ()
-        {
-            // Return state of the control mode
-            if (isInDirectMovement)
-            {
-                playerMovement.ProcessDirectMovement();
-                controlMode = "Keyboard";
-            }
-            else
-            {
-                controlMode = "Mouse";
-            }
-        }
-        #endregion
-
+        
         #region Handle Animation and Movement
         private void Update ()
         {
-            MoveCharacter();
+            if (playerMovement)
+            {
+                HandleKeyPresses();
+            }
+                MoveCharacter();
+            
+        }
+
+        public void Move (Vector3 movement)
+        {
+            SetForwardAndTurn(movement);
+            ApplyExtraTurnRotation();
+            UpdateAnimator();
         }
 
         private void MoveCharacter ()
@@ -147,11 +116,11 @@ namespace RPG.Characters
             {
                 if (isAlive && navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance)
                 {
-                    playerMovement.Move(navMeshAgent.desiredVelocity);
+                    Move(navMeshAgent.desiredVelocity);
                 }
                 else
                 {
-                    playerMovement.Move(Vector3.zero);
+                    Move(Vector3.zero);
                 }
             }
         }
@@ -167,20 +136,57 @@ namespace RPG.Characters
             }
         }
 
-        public void SetDestination(Vector3 worldPos)
+        public void SetDestination (Vector3 worldPos)
         {
             navMeshAgent.destination = worldPos;
         }
 
-        
+        private void SetForwardAndTurn (Vector3 movement)
+        {
+            // convert the world relative moveInput vector into a local-relative
+            // turn amount and forward amount required to head in the desired
+            // direction.
+            if (movement.magnitude > moveThreshold)
+            {
+                movement.Normalize();
+            }
+
+            Vector3 localMovement = transform.InverseTransformDirection(movement);
+            turnAmount = Mathf.Atan2(localMovement.x, localMovement.z);
+            forwardAmount = localMovement.z;
+        }
+
+        void UpdateAnimator ()
+        {
+            // update the animator parameters
+            Animator animator = GetComponent<Animator>();
+            animator.SetFloat("Forward", forwardAmount, 0.1f, Time.deltaTime);
+            animator.SetFloat("Turn", turnAmount, 0.1f, Time.deltaTime);
+        }
+
+        void ApplyExtraTurnRotation ()
+        {
+            // help the character turn faster (this is in addition to root rotation in the animation)
+            float turnSpeed = Mathf.Lerp(stationaryTurnSpeed, movingTurnSpeed, forwardAmount);
+            transform.Rotate(0, turnAmount * turnSpeed * Time.deltaTime, 0);
+        }
+        #endregion
+
+        private void HandleKeyPresses ()
+        {
+            if (Input.GetKeyUp(KeyCode.G))
+            {
+                // Enable/disable automatic controls
+                isInDirectMovement = !isInDirectMovement;
+                navMeshAgent.enabled = !navMeshAgent.enabled;
+                playerMovement.CheckControlMode();
+            }
+        }
 
         public void Kill ()
         {
             isAlive = false;
         }
-
-        
-        #endregion
     }
 }
 

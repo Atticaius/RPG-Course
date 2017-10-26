@@ -8,15 +8,14 @@ namespace RPG.CameraUI
 {
     public class UIManager : MonoBehaviour
     {
-
         [SerializeField] Text text;
-        private Character playerMovement;
-        // Use this for initialization
-        void Awake ()
+        GameObject player;
+
+        private void Start ()
         {
             text = GetComponentInChildren<Text>();
-            playerMovement = FindObjectOfType<Character>();
-            playerMovement.ControlModeDelegate += onControlModeChange;
+            player = GameObject.FindGameObjectWithTag("Player");
+            player.GetComponent<PlayerMovement>().ControlModeDelegate += onControlModeChange;
         }
 
         // Update is called once per frame

@@ -88,7 +88,7 @@ namespace RPG.Characters
             PlayerMovement playerComponent = GetComponent<PlayerMovement>();
             if (playerComponent && playerComponent.isActiveAndEnabled)
             {
-                audioSource.clip = deathSounds[UnityEngine.Random.Range(0, deathSounds.Length)];
+                audioSource.clip = deathSounds[Random.Range(0, deathSounds.Length)];
                 audioSource.Play();
                 yield return new WaitForSecondsRealtime(audioSource.clip.length);
                 SceneManager.LoadScene(0);
