@@ -45,9 +45,9 @@ namespace RPG.Characters
 
         private void OnTriggerEnter (Collider other)
         {
-            if (other.GetComponent<Player>())
+            if (other.GetComponent<PlayerMovement>())
             {
-                Player player = other.GetComponent<Player>();
+                PlayerMovement player = other.GetComponent<PlayerMovement>();
                 player.PutWeaponInHand(weaponConfig);
                 audioSource.PlayOneShot(pickUpSound);
             }

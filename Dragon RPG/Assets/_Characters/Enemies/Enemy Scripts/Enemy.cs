@@ -5,12 +5,11 @@ using RPG.Core;
 
 namespace RPG.Characters
 {
-    public class Enemy : MonoBehaviour, IDamageable
+    public class Enemy : MonoBehaviour
     {
 
         // Object References
-        AICharacterControl aiCharacterControl;
-        Player player;
+        PlayerMovement player;
 
         // Variables
         [SerializeField] float maxHealthPoints = 100f;
@@ -46,13 +45,12 @@ namespace RPG.Characters
 
         private void Start ()
         {
-            aiCharacterControl = GetComponent<AICharacterControl>();
-            player = FindObjectOfType<Player>();
+            player = FindObjectOfType<PlayerMovement>();
         }
 
         private void Update ()
         {
-            if (player.HealthAsPercentage <= Mathf.Epsilon)
+            if (player.GetComponent<HealthSystem>().HealthAsPercentage <= Mathf.Epsilon)
             {
                 StopAllCoroutines();
                 Destroy(this);
@@ -70,7 +68,7 @@ namespace RPG.Characters
             }
             else
             {
-                aiCharacterControl.SetTarget(transform);
+                // aiCharacterControl.SetTarget(transform);
             }
 
             if (IsInAttackRange(player.gameObject))
@@ -81,7 +79,7 @@ namespace RPG.Characters
 
         void ChaseTarget (GameObject target)
         {
-            aiCharacterControl.SetTarget(player.transform);
+            // aiCharacterControl.SetTarget(player.transform);
         }
 
         void AttackTarget (GameObject target)
@@ -119,14 +117,14 @@ namespace RPG.Characters
             }
         }
 
-        public void TakeDamage (float damage)
-        {
-            currentHealthPoints = Mathf.Clamp(currentHealthPoints - damage, 0, maxHealthPoints);
-            if (currentHealthPoints <= 0)
-            {
-                Destroy(gameObject);
-            }
-        }
+        //public void TakeDamage (float damage)
+        //{
+        //    currentHealthPoints = Mathf.Clamp(currentHealthPoints - damage, 0, maxHealthPoints);
+        //    if (currentHealthPoints <= 0)
+        //    {
+        //        Destroy(gameObject);
+        //    }
+        //}
 
         private void OnDrawGizmos ()
         {

@@ -45,10 +45,10 @@ namespace RPG.Characters
 
         private void DamageIfDamageable (Collision other)
         {
-            Component damageableComponent = other.gameObject.GetComponent(typeof(IDamageable));
+            HealthSystem damageableComponent = other.gameObject.GetComponent<HealthSystem>();
             if (damageableComponent)
             {
-                (damageableComponent as IDamageable).TakeDamage(damageCaused);
+                damageableComponent.TakeDamage(damageCaused);
                 Destroy(gameObject);
             }
             Destroy(gameObject, DESTROY_DELAY);

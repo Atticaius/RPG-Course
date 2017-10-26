@@ -9,19 +9,19 @@ namespace RPG.Characters
     public class PlayerHealthBar : MonoBehaviour
     {
         Image healthOrb;
-        Player player;
+        PlayerMovement player;
 
         // Use this for initialization
         void Start ()
         {
-            player = FindObjectOfType<Player>();
+            player = FindObjectOfType<PlayerMovement>();
             healthOrb = GetComponent<Image>();
         }
 
         // Update is called once per frame
         void Update ()
         {
-            healthOrb.fillAmount = player.HealthAsPercentage;
+            healthOrb.fillAmount = player.GetComponent<HealthSystem>().HealthAsPercentage;
         }
     }
 }

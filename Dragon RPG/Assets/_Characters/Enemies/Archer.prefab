@@ -38,9 +38,8 @@ GameObject:
   - component: {fileID: 54722498477907250}
   - component: {fileID: 136283124012425928}
   - component: {fileID: 195478786937506248}
-  - component: {fileID: 114741633835531194}
-  - component: {fileID: 114047452326175826}
   - component: {fileID: 114724386677803484}
+  - component: {fileID: 114835262168664282}
   m_Layer: 9
   m_Name: Archer
   m_TagString: Enemy
@@ -486,7 +485,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1129641212689758}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.728, z: 0}
+  m_LocalPosition: {x: 0, y: 2.03, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4366134208196592}
@@ -498,7 +497,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1086873119425710}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -37.87377, y: 0.111, z: -12.339}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -788,25 +787,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114047452326175826
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1086873119425710}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce7a80d520cacc042b5fe14f373d8173, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_MovingTurnSpeed: 360
-  m_StationaryTurnSpeed: 180
-  m_JumpPower: 6
-  m_GravityMultiplier: 2
-  m_RunCycleLegOffset: 0.2
-  m_MoveSpeedMultiplier: 0.9
-  m_AnimSpeedMultiplier: 1
-  m_GroundCheckDistance: 0.3
 --- !u!114 &114561342537849658
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -839,8 +819,9 @@ MonoBehaviour:
   projectileSocket: {fileID: 1970728841074966}
   damagePerShot: 8
   secondsBetweenShots: 1
+  shotVariation: 0.1
   verticalAimOffset: {x: 0, y: 1, z: 0}
---- !u!114 &114741633835531194
+--- !u!114 &114835262168664282
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -848,10 +829,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1086873119425710}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c5335f0882fe4d478883cc8c58ce906, type: 3}
+  m_Script: {fileID: 11500000, guid: 54e727fe9f4cc5640b9c25f828dcc758, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
+  healthBar: {fileID: 0}
+  maxHealthPoints: 100
+  damageSounds: []
+  deathSounds: []
+  deathVanishSeconds: 2
 --- !u!136 &136283124012425928
 CapsuleCollider:
   m_ObjectHideFlags: 1

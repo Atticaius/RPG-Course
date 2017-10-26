@@ -18,7 +18,7 @@ namespace RPG.Characters
             return objectToAttachTo.AddComponent<AreaOfEffectBehavior>();
         }
 
-        public float GetExtraDamage ()
+        public float GetAbilityDamage ()
         {
             return damageToEachTarget;
         }

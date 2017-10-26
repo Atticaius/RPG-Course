@@ -96,15 +96,10 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4260170684040706}
-  - component: {fileID: 95468679155182784}
-  - component: {fileID: 54278291809460898}
-  - component: {fileID: 136565877553513888}
-  - component: {fileID: 195290969485580424}
-  - component: {fileID: 82556950042606950}
-  - component: {fileID: 114258099008598276}
   - component: {fileID: 114341307543172760}
-  - component: {fileID: 114588294270600956}
   - component: {fileID: 114635305671577738}
+  - component: {fileID: 114339917072580262}
+  - component: {fileID: 114628314108696410}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -661,119 +656,7 @@ Transform:
   m_Father: {fileID: 4804116213371680}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &54278291809460898
-Rigidbody:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1296489112970354}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 1
---- !u!82 &82556950042606950
-AudioSource:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1296489112970354}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
---- !u!95 &95468679155182784
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1296489112970354}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 8d0a57b326030fc44ad6eeab6f398c6a, type: 3}
-  m_Controller: {fileID: 9100000, guid: e2cf68ff4b1ffda45a77f7307dd789b9, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114258099008598276
+--- !u!114 &114339917072580262
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -781,67 +664,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1296489112970354}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce7a80d520cacc042b5fe14f373d8173, type: 3}
+  m_Script: {fileID: 11500000, guid: 54e727fe9f4cc5640b9c25f828dcc758, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MovingTurnSpeed: 360
-  m_StationaryTurnSpeed: 180
-  m_JumpPower: 6
-  m_GravityMultiplier: 2
-  m_RunCycleLegOffset: 0.2
-  m_MoveSpeedMultiplier: 1
-  m_AnimSpeedMultiplier: 1
-  m_GroundCheckDistance: 1
---- !u!114 &114341307543172760
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1296489112970354}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73a98769001244a408b18a08109df8fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stoppingDistance: 1.5
-  controlMode: 
---- !u!114 &114588294270600956
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1296489112970354}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c61968106a0d4d498afe3fae1758518, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  energyOrb: {fileID: 0}
-  maxEnergyPoints: 100
-  regenPointsPerSecond: 10
---- !u!114 &114635305671577738
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1296489112970354}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8112f91b4098a549a4f387f20c2eb35, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animatorOverrideController: {fileID: 22100000, guid: 0211a4a030d9fc04a971f3a5cd629d20,
-    type: 2}
-  currentWeaponConfig: {fileID: 11400000, guid: dcd86c11d70590c4eb58c5fe1e85a72f,
-    type: 2}
-  criticalHitParticles: {fileID: 198156440389713404}
-  baseDamage: 10
-  critChance: 0.2
-  critMultiplier: 1.5
-  abilities:
-  - {fileID: 11400000, guid: 48b41175839a48841a346266b8e7074e, type: 2}
-  - {fileID: 11400000, guid: 4a7e5d7c59362554780299e9b300d49e, type: 2}
-  - {fileID: 11400000, guid: 01e5818ec6a893d40b9f41bc17ae07ec, type: 2}
+  healthBar: {fileID: 0}
+  maxHealthPoints: 1000
   damageSounds:
   - {fileID: 8300000, guid: 0a4a49d731dcf6b4a8b70e76ca0cc368, type: 3}
   - {fileID: 8300000, guid: 475418cd2f16fe34493219adbc85fa80, type: 3}
@@ -853,8 +680,81 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a428409d0f7a3754796d291ec42b0f71, type: 3}
   - {fileID: 8300000, guid: 4b384ce86897d2244b0a498860503918, type: 3}
   - {fileID: 8300000, guid: c115193d5b3446a4a9d1803a981d11d1, type: 3}
-  maxHealthPoints: 10000
-  currentHealthPoints: 100
+  deathVanishSeconds: 2
+--- !u!114 &114341307543172760
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1296489112970354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73a98769001244a408b18a08109df8fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animatorController: {fileID: 9100000, guid: e2cf68ff4b1ffda45a77f7307dd789b9, type: 2}
+  animatorOverrideController: {fileID: 22100000, guid: 0211a4a030d9fc04a971f3a5cd629d20,
+    type: 2}
+  characterAvatar: {fileID: 9000000, guid: 8d0a57b326030fc44ad6eeab6f398c6a, type: 3}
+  capsuleCenter: {x: 0, y: 0.9620609, z: 0}
+  capsuleRadius: 0.3
+  capsuleHeight: 1.957076
+  spatialBlend: 0.5
+  stoppingDistance: 1.5
+  moveSpeedMultiplier: 1
+  movingTurnSpeed: 360
+  stationaryTurnSpeed: 180
+  moveThreshold: 1
+--- !u!114 &114628314108696410
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1296489112970354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 068c7c1c42e8d814ea12c16da5aa5fa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  energyOrb: {fileID: 0}
+  outOfEnergySound: {fileID: 8300000, guid: d6a8659218eb3704b9d1d17506dc396a, type: 3}
+  abilities:
+  - {fileID: 11400000, guid: 48b41175839a48841a346266b8e7074e, type: 2}
+  - {fileID: 11400000, guid: 4a7e5d7c59362554780299e9b300d49e, type: 2}
+  - {fileID: 11400000, guid: 01e5818ec6a893d40b9f41bc17ae07ec, type: 2}
+  maxEnergyPoints: 100
+  regenPointsPerSecond: 1
+--- !u!114 &114635305671577738
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1296489112970354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8112f91b4098a549a4f387f20c2eb35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentTarget: {fileID: 0}
+  animatorOverrideController: {fileID: 22100000, guid: 0211a4a030d9fc04a971f3a5cd629d20,
+    type: 2}
+  currentWeaponConfig: {fileID: 11400000, guid: dcd86c11d70590c4eb58c5fe1e85a72f,
+    type: 2}
+  criticalHitParticles: {fileID: 198156440389713404}
+  baseDamage: 10
+  critChance: 0.2
+  critMultiplier: 1.5
+  damageSounds:
+  - {fileID: 8300000, guid: 0a4a49d731dcf6b4a8b70e76ca0cc368, type: 3}
+  - {fileID: 8300000, guid: 475418cd2f16fe34493219adbc85fa80, type: 3}
+  - {fileID: 8300000, guid: c01d1c0b9e40b34409c4a2041a6101f2, type: 3}
+  - {fileID: 8300000, guid: aa23d8f7756a0724e8e0f90fddc6c707, type: 3}
+  - {fileID: 8300000, guid: db1eab88b105cb74a9d059cc52bbd3db, type: 3}
+  - {fileID: 8300000, guid: 36418ce67c8c3014090975eb85e81903, type: 3}
+  deathSounds:
+  - {fileID: 8300000, guid: a428409d0f7a3754796d291ec42b0f71, type: 3}
+  - {fileID: 8300000, guid: 4b384ce86897d2244b0a498860503918, type: 3}
+  - {fileID: 8300000, guid: c115193d5b3446a4a9d1803a981d11d1, type: 3}
 --- !u!114 &114807288060115498
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -866,19 +766,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a76fa91d258b1b4d8ac8cb0755ddf1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!136 &136565877553513888
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1296489112970354}
-  m_Material: {fileID: 13400000, guid: c2815a7ab32e42c4bb42f59caacb8ec1, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.3
-  m_Height: 1.9570756
-  m_Direction: 1
-  m_Center: {x: -0, y: 0.9620609, z: -0}
 --- !u!137 &137857982059252206
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -945,27 +832,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.1502218, y: -0.00029858947, z: 0.03673148}
     m_Extent: {x: 0.93976724, y: 0.88750696, z: 0.3241462}
   m_DirtyAABB: 0
---- !u!195 &195290969485580424
-NavMeshAgent:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1296489112970354}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 1
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 1.5
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!198 &198156440389713404
 ParticleSystem:
   m_ObjectHideFlags: 1

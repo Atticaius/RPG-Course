@@ -8,19 +8,12 @@ namespace RPG.Characters
     public class SelfHealConfig : AbilityConfig
     {
         [Header("Self-Heal Specific")]
-        [SerializeField] float extraHealth = 50f;
-        Player player;
+        [SerializeField] float extraHealth = 100f;
+        PlayerMovement player;
 
         public override AbilityBehavior GetBehaviorComponent (GameObject objectToAttachTo)
         {
             return objectToAttachTo.AddComponent<SelfHealBehavior>();
-        }
-
-        public float GetHealingAmount ()
-        {
-            player = FindObjectOfType<Player>();
-            float healingAmount = player.maxHealthPoints - player.currentHealthPoints;
-            return healingAmount;
         }
 
         public float GetExtraHealth
