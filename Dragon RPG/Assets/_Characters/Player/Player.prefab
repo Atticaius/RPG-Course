@@ -480,7 +480,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1296489112970354}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -33.33353, y: 0, z: -2.63}
+  m_LocalPosition: {x: -40.77, y: 0, z: 4.29}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4143434587935694}
@@ -685,7 +685,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBar: {fileID: 0}
-  maxHealthPoints: 1000
+  maxHealthPoints: 150
   damageSounds:
   - {fileID: 8300000, guid: 0a4a49d731dcf6b4a8b70e76ca0cc368, type: 3}
   - {fileID: 8300000, guid: 475418cd2f16fe34493219adbc85fa80, type: 3}
@@ -713,12 +713,16 @@ MonoBehaviour:
   animatorOverrideController: {fileID: 22100000, guid: 0211a4a030d9fc04a971f3a5cd629d20,
     type: 2}
   characterAvatar: {fileID: 9000000, guid: 8d0a57b326030fc44ad6eeab6f398c6a, type: 3}
+  moveThreshold: 1
+  animSpeedMultiplier: 1
   spatialBlend: 0.5
   capsuleCenter: {x: 0, y: 0.9620609, z: 0}
   capsuleRadius: 0.3
   capsuleHeight: 1.957076
   navMeshStoppingDistance: 1.5
   moveSpeedMultiplier: 1
+  movingTurnSpeed: 360
+  stationaryTurnSpeed: 180
   isInDirectMovement: 0
 --- !u!114 &114628314108696410
 MonoBehaviour:
@@ -750,20 +754,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8112f91b4098a549a4f387f20c2eb35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movingTurnSpeed: 360
-  stationaryTurnSpeed: 180
-  moveThreshold: 1
-  damageSounds:
-  - {fileID: 8300000, guid: 0a4a49d731dcf6b4a8b70e76ca0cc368, type: 3}
-  - {fileID: 8300000, guid: 475418cd2f16fe34493219adbc85fa80, type: 3}
-  - {fileID: 8300000, guid: c01d1c0b9e40b34409c4a2041a6101f2, type: 3}
-  - {fileID: 8300000, guid: aa23d8f7756a0724e8e0f90fddc6c707, type: 3}
-  - {fileID: 8300000, guid: db1eab88b105cb74a9d059cc52bbd3db, type: 3}
-  - {fileID: 8300000, guid: 36418ce67c8c3014090975eb85e81903, type: 3}
-  deathSounds:
-  - {fileID: 8300000, guid: a428409d0f7a3754796d291ec42b0f71, type: 3}
-  - {fileID: 8300000, guid: 4b384ce86897d2244b0a498860503918, type: 3}
-  - {fileID: 8300000, guid: c115193d5b3446a4a9d1803a981d11d1, type: 3}
 --- !u!114 &114807288060115498
 MonoBehaviour:
   m_ObjectHideFlags: 1

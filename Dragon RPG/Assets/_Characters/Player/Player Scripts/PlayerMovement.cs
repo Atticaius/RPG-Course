@@ -2,6 +2,7 @@
 using UnityEngine.Assertions;
 using RPG.CameraUI;
 using System;
+using System.Collections;
 
 namespace RPG.Characters
 {
@@ -83,6 +84,65 @@ namespace RPG.Characters
         }
         #endregion
 
+        #region Mouse Events
+        void OnMouseOverPotentiallyWalkable (Vector3 destination)
+        {
+            if (Input.GetMouseButtonDown(0) && !character.isInDirectMovement)
+            {
+                weaponSystem.StopAttacking();
+                character.SetDestination(destination);
+            }
+        }
+
+        void OnMouseOverEnemy (EnemyAI enemy)
+        {
+            if (enemy != null)
+            {
+                currentTarget = enemy.gameObject;
+                if (Input.GetMouseButtonDown(0) && IsInWeaponRange(currentTarget))
+                {
+                    weaponSystem.AttackTarget(currentTarget);
+                } else if (Input.GetMouseButton(0) && !IsInWeaponRange(currentTarget))
+                {
+                    StartCoroutine(MoveAndAttack(currentTarget));
+                } else if (Input.GetMouseButtonDown(1) && IsInAbilityRange(currentTarget))
+                {
+                    specialAbilities.AttemptSpecialAbility(0, currentTarget);
+                }
+                else if (Input.GetMouseButtonDown(1) && !IsInAbilityRange(currentTarget))
+                {
+                    StartCoroutine(MoveAndPowerAttack(currentTarget));
+                }
+            }
+        }
+
+        IEnumerator MoveToTarget (GameObject target)
+        {
+            if (!character.isInDirectMovement)
+            {
+                character.SetDestination(target.transform.position);
+            }
+            
+            while (!IsInWeaponRange(target))
+            {
+                yield return new WaitForEndOfFrame();
+            }
+            yield return new WaitForEndOfFrame();
+        }
+
+        IEnumerator MoveAndAttack (GameObject target)
+        {
+            yield return StartCoroutine(MoveToTarget(target));
+            weaponSystem.AttackTarget(target);
+        }
+
+        IEnumerator MoveAndPowerAttack (GameObject target)
+        {
+            yield return StartCoroutine(MoveToTarget(target));
+            specialAbilities.AttemptSpecialAbility(0, target);
+        }
+        #endregion
+
         #region Range Checks
         private bool IsInWeaponRange (GameObject target)
         {
@@ -94,32 +154,6 @@ namespace RPG.Characters
         {
             bool isinRange = Vector3.Distance(transform.position, target.transform.position) <= abilityRange;
             return isinRange;
-        }
-        #endregion
-
-        #region Mouse Events
-        void OnMouseOverEnemy (EnemyAI enemy)
-        {
-            if (enemy != null)
-            {
-                currentTarget = enemy.gameObject;
-                if (Input.GetMouseButtonDown(0) && IsInWeaponRange(enemy.gameObject))
-                {
-                    weaponSystem.AttackTarget(currentTarget);
-                }
-                else if (Input.GetMouseButtonDown(1))
-                {
-                    specialAbilities.AttemptSpecialAbility(0, currentTarget);
-                }
-            }
-        }
-
-        void OnMouseOverPotentiallyWalkable (Vector3 destination)
-        {
-            if (Input.GetMouseButtonDown(0) && !character.isInDirectMovement)
-            {
-                character.SetDestination(destination); 
-            }
         }
         #endregion
 

@@ -81,7 +81,6 @@ namespace RPG.Characters
 
         IEnumerator KillCharacter ()
         {
-            StopAllCoroutines();
             character.Kill();
             animator.SetTrigger(DEATH_TRIGGER);
 
@@ -96,6 +95,7 @@ namespace RPG.Characters
             else
             {
                 Destroy(gameObject, deathVanishSeconds);
+                StopAllCoroutines();
             }
         }
 

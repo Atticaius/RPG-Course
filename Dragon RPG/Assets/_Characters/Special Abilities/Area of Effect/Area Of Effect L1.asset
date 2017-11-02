@@ -11,6 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 986bed07f6e06ee499230c4ff8e2e11d, type: 3}
   m_Name: Area Of Effect L1
   m_EditorClassIdentifier: 
+  abilityAnimation: {fileID: 7400000, guid: 8787cc3da435ba04e8954530e0c91454, type: 3}
   energyCost: 10
   particlePrefab: {fileID: 1736960750490476, guid: bcebb5ad730e23b4b8c2fe987b765ed6,
     type: 2}

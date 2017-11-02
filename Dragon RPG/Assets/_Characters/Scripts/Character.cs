@@ -13,6 +13,9 @@ namespace RPG.Characters
         [SerializeField] AnimatorOverrideController animatorOverrideController;
         [SerializeField] Avatar characterAvatar;
         [SerializeField] float moveThreshold = 1f;
+        [SerializeField] float animSpeedMultiplier = 1f;
+        Animator animator;
+        // Getters
         public AnimatorOverrideController GetOverrideController
         {
             get
@@ -20,7 +23,13 @@ namespace RPG.Characters
                 return animatorOverrideController;
             }
         }
-        Animator animator;
+        public float GetAnimSpeedMultiplier
+        {
+            get
+            {
+                return animSpeedMultiplier;
+            }
+        }
 
         [Header("Audio")]
         [Range(0, 1f)] [SerializeField] float spatialBlend = .5f;
@@ -99,8 +108,7 @@ namespace RPG.Characters
             {
                 HandleKeyPresses();
             }
-                MoveCharacter();
-            
+            MoveCharacter();
         }
 
         public void Move (Vector3 movement)
@@ -159,9 +167,9 @@ namespace RPG.Characters
         void UpdateAnimator ()
         {
             // update the animator parameters
-            Animator animator = GetComponent<Animator>();
             animator.SetFloat("Forward", forwardAmount, 0.1f, Time.deltaTime);
             animator.SetFloat("Turn", turnAmount, 0.1f, Time.deltaTime);
+            animator.speed = animSpeedMultiplier;
         }
 
         void ApplyExtraTurnRotation ()

@@ -8,6 +8,8 @@ namespace RPG.Characters
         protected AbilityConfig config;
 
         const float PARTICLE_CLEANUP_DELAY = 20f;
+        const string DEFAULT_ATTACK = "Default Attack";
+        const string ATTACK_TRIGGER = "Attack";
 
         public abstract void Use (GameObject target = null);
 
@@ -18,7 +20,7 @@ namespace RPG.Characters
 
         protected void PlayParticleEffect ()
         {
-            GameObject particlePrefab = config.GetParticlePrefab();
+            GameObject particlePrefab = config.GetParticlePrefab;
             GameObject particleSystemObject = Instantiate(particlePrefab, transform.position, particlePrefab.transform.rotation);
             particleSystemObject.transform.parent = transform;
             particleSystemObject.GetComponent<ParticleSystem>().Play();
@@ -37,9 +39,18 @@ namespace RPG.Characters
 
         protected void PlayAbilitySound ()
         {
-            AudioClip abilitySound = config.GetAudioClip();
+            AudioClip abilitySound = config.GetAudioClip;
             AudioSource audioSource = GetComponent<AudioSource>();
             audioSource.PlayOneShot(abilitySound);
+        }
+
+        protected void PlayAbilityAnimation ()
+        {
+            AnimatorOverrideController animatorOverrideController = GetComponent<Character>().GetOverrideController;
+            Animator animator = GetComponent<Animator>();
+            animator.runtimeAnimatorController = animatorOverrideController;
+            animatorOverrideController[DEFAULT_ATTACK] = config.GetAnimationClip;
+            animator.SetTrigger(ATTACK_TRIGGER);
         }
     }
 }

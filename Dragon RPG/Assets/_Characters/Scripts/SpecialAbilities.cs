@@ -82,10 +82,11 @@ namespace RPG.Characters
 
         public void AttemptSpecialAbility (int abilityIndex, GameObject target = null)
         {
-            var energyCost = abilities[abilityIndex].GetEnergyCost();
+            var energyCost = abilities[abilityIndex].GetEnergyCost;
 
             if (energyCost <= currentEnergyPoints)
             {
+                // transform.LookAt(target.transform);
                 UseEnergy(energyCost);
                 abilities[abilityIndex].Use(target);
             } else

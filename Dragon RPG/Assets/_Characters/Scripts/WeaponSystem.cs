@@ -16,6 +16,7 @@ namespace RPG.Characters
         const string ATTACK_TRIGGER = "Attack";
 
         // Attacking
+        GameObject target;
         float lastHitTime;
 
         // Weapon Config
@@ -65,23 +66,82 @@ namespace RPG.Characters
         }
         #endregion
 
-        #region Attacking and Special Abilities
-        public void AttackTarget (GameObject target)
+        #region Attacking
+        private void Update ()
         {
-            if (target != null)
+            bool targetIsDead;
+            bool targetIsOutOfRange;
+            if (target == null)
             {
-                if (Time.time - lastHitTime > currentWeaponConfig.GetSecondsBetweenHits())
+                targetIsDead = false;
+                targetIsOutOfRange = false;
+            } else
+            {
+                float targetHealth = target.GetComponent<HealthSystem>().HealthAsPercentage;
+                targetIsDead = targetHealth <= Mathf.Epsilon;
+
+                float distanceToTarget = Vector3.Distance(transform.position, target.transform.position);
+                targetIsOutOfRange = distanceToTarget > currentWeaponConfig.GetAttackRange();
+            }
+
+            float characterHealth = GetComponent<HealthSystem>().HealthAsPercentage;
+            bool characterIsDead = characterHealth <= Mathf.Epsilon;
+
+            if (characterIsDead || targetIsOutOfRange || targetIsDead)
+            {
+                StopAllCoroutines();
+            }
+        }
+        public void AttackTarget (GameObject targetToAttack)
+        {
+            target = targetToAttack;
+            StartCoroutine(AttackTargetRepeatedly());
+        }
+
+        IEnumerator AttackTargetRepeatedly ()
+        {
+            bool attackerStillAlive = GetComponent<HealthSystem>().HealthAsPercentage >= Mathf.Epsilon;
+            bool targetStillAlive = target.GetComponent<HealthSystem>().HealthAsPercentage >= Mathf.Epsilon;
+
+            while (attackerStillAlive && targetStillAlive)
+            {
+                float weaponHitPeriod = currentWeaponConfig.GetTimeBetweenAnimationCycles();
+                float timeToWait = weaponHitPeriod * character.GetAnimSpeedMultiplier;
+                bool isTimeToHitAgain = Time.time - lastHitTime > timeToWait;
+
+                if (isTimeToHitAgain)
                 {
-                    SetAttackAnimation();
-                    animator.SetTrigger(ATTACK_TRIGGER);
-                    target.gameObject.GetComponent<HealthSystem>().TakeDamage(CalculateDamage());
+                    AttackTargetOnce();
                     lastHitTime = Time.time;
                 }
+                yield return new WaitForSeconds(timeToWait);
             }
-            else
+        }
+
+        void AttackTargetOnce ()
+        {
+            if (Vector3.Distance(transform.position, target.transform.position) <= currentWeaponConfig.GetAttackRange())
             {
-                CancelInvoke();
+                transform.LookAt(target.transform);
+                animator.SetTrigger(ATTACK_TRIGGER);
+                float damageDelay = currentWeaponConfig.GetTimeBetweenAnimationCycles();
+                StartCoroutine(DamageAfterDelay(damageDelay));
+            } else
+            {
+                StopAttacking();
             }
+        }
+
+        public void StopAttacking ()
+        {
+            animator.StopPlayback();
+            StopAllCoroutines();
+        }
+
+        IEnumerator DamageAfterDelay (float delaySeconds)
+        {
+            yield return new WaitForSecondsRealtime(delaySeconds);
+            target.GetComponent<HealthSystem>().TakeDamage(CalculateDamage());
         }
 
         float CalculateDamage ()

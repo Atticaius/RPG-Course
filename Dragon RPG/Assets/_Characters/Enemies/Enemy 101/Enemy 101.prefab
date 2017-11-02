@@ -37,6 +37,7 @@ GameObject:
   - component: {fileID: 114331465437838220}
   - component: {fileID: 114417461285243628}
   - component: {fileID: 114572387631410400}
+  - component: {fileID: 114108289568754708}
   m_Layer: 9
   m_Name: Enemy 101
   m_TagString: Enemy
@@ -550,7 +551,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1039169079044374}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -37.87377, y: 0.111, z: -12.339}
+  m_LocalPosition: {x: -34.69, y: 0.111, z: -14.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4525304557053186}
@@ -694,6 +695,22 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1433209695384448}
   m_Mesh: {fileID: 4300002, guid: 867694a5858127940bb9ecb81fec5742, type: 3}
+--- !u!114 &114108289568754708
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1039169079044374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54e727fe9f4cc5640b9c25f828dcc758, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBar: {fileID: 0}
+  maxHealthPoints: 100
+  damageSounds: []
+  deathSounds: []
+  deathVanishSeconds: 2
 --- !u!114 &114331465437838220
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -709,12 +726,16 @@ MonoBehaviour:
   animatorOverrideController: {fileID: 22100000, guid: 58b05c16bc7e12546a1f9fa01aff92e5,
     type: 2}
   characterAvatar: {fileID: 9000000, guid: 867694a5858127940bb9ecb81fec5742, type: 3}
+  moveThreshold: 1
+  animSpeedMultiplier: 1
   spatialBlend: 0.5
   capsuleCenter: {x: 0, y: 0.9620609, z: 0}
   capsuleRadius: 0.3
   capsuleHeight: 1.957076
   navMeshStoppingDistance: 1.5
-  moveSpeedMultiplier: 1
+  moveSpeedMultiplier: 0.5
+  movingTurnSpeed: 360
+  stationaryTurnSpeed: 180
   isInDirectMovement: 0
 --- !u!114 &114417461285243628
 MonoBehaviour:
@@ -754,6 +775,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82a0347f03df397458b91eac17707956, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  patrolPath: {fileID: 0}
+  waypointDistance: 1
   chaseRadius: 6
 --- !u!137 &137942245309784186
 SkinnedMeshRenderer:

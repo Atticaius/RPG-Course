@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 223147761770295072}
   - component: {fileID: 114703276676944362}
   - component: {fileID: 114898847610279648}
+  - component: {fileID: 114573998914230026}
   m_Layer: 9
   m_Name: Enemy UI Canvas
   m_TagString: Untagged
@@ -38,7 +39,6 @@ GameObject:
   m_Component:
   - component: {fileID: 224642582148153372}
   - component: {fileID: 222055213259394038}
-  - component: {fileID: 114528474811526030}
   - component: {fileID: 114224807147813298}
   m_Layer: 9
   m_Name: Enemy Health Bar
@@ -67,22 +67,22 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 21300000, guid: 2237398935fda60409ddf321a9b0df91, type: 3}
-  m_Type: 0
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114528474811526030
+--- !u!114 &114573998914230026
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1617796374896646}
+  m_GameObject: {fileID: 1036212710681410}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cff48e609d2e90f449b76ce61dcb7bbb, type: 3}
+  m_Script: {fileID: 11500000, guid: b1946e1c1bae1c34ba2666ebb3463952, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &114703276676944362
@@ -164,7 +164,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 2.047}
   m_SizeDelta: {x: 22.27, y: 4.36}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224642582148153372
@@ -182,6 +182,6 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.00024795532, y: 0.0000014305}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}

@@ -10,6 +10,7 @@ namespace RPG.Characters
         {
             float damageToDeal = (config as PowerAttackConfig).GetAbilityDamage();
             target.GetComponent<HealthSystem>().TakeDamage(damageToDeal);
+            PlayAbilityAnimation();
             PlayAbilitySound();
         }
     }

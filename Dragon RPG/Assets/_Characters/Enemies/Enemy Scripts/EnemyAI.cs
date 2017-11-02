@@ -6,6 +6,7 @@ namespace RPG.Characters
 {
     [RequireComponent(typeof(Character))]
     [RequireComponent(typeof(WeaponSystem))]
+    [RequireComponent(typeof(HealthSystem))]
     public class EnemyAI : MonoBehaviour
     {
         // Object References
@@ -13,18 +14,20 @@ namespace RPG.Characters
         Character character;
 
         // Chase Range
+        [SerializeField] float chaseRadius = 6f;
         float distanceToPlayer;
+
+        // Waypoint System
+        [SerializeField] WaypointContainer patrolPath;
+        [SerializeField] float waypointDistance = 1f;
+        float waitSeconds = .5f;
+        enum State { idle, attacking, patrolling, chasing }
+        State state = State.idle;
+        int nextWaypointIndex = 0;
 
         // Weapon System
         WeaponSystem weaponSystem;
         float currentWeaponRange;
-
-        // Variables
-        [SerializeField] float chaseRadius = 6f;
-        bool isAttacking; // TODO Turn into richer state
-
-        enum State { idle, attacking, patrolling, chasing}
-        State state = State.idle;
 
         private void Start ()
         {
@@ -40,7 +43,7 @@ namespace RPG.Characters
             if (distanceToPlayer > chaseRadius && state != State.patrolling)
             {
                 StopAllCoroutines();
-                state = State.patrolling;
+                StartCoroutine(Patrol());
             }
 
             if (distanceToPlayer <= chaseRadius && state != State.chasing)
@@ -52,7 +55,28 @@ namespace RPG.Characters
             if (distanceToPlayer <= currentWeaponRange && state != State.attacking)
             {
                 StopAllCoroutines();
-                state = State.attacking;
+                state = State.attacking;                
+                weaponSystem.AttackTarget(player.gameObject);
+            }
+        }
+
+        IEnumerator Patrol ()
+        {
+            state = State.patrolling;
+            while (true)
+            {
+                Vector3 nextWaypointPos = patrolPath.transform.GetChild(nextWaypointIndex).position;
+                character.SetDestination(nextWaypointPos);
+                CycleWaypointWhenClose(nextWaypointPos);
+                yield return new WaitForSeconds(waitSeconds);
+            }
+        }
+
+        void CycleWaypointWhenClose (Vector3 nextWaypointPos)
+        {
+            if (Vector3.Distance(transform.position, nextWaypointPos) <= waypointDistance)
+            {
+                nextWaypointIndex = (nextWaypointIndex + 1) % patrolPath.transform.childCount;
             }
         }
 
@@ -65,7 +89,7 @@ namespace RPG.Characters
                 yield return new WaitForEndOfFrame();
             }
         }
-
+        
         private void OnDrawGizmos ()
         {
             Gizmos.color = Color.black;
